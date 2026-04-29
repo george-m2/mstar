@@ -6,8 +6,22 @@ dist/
 wheels/
 *.egg-info
 
-# Dataset (downloaded from Kaggle at runtime)
+# Dataset (downloaded from Kaggle / HF at runtime)
 Padded_imgs/
+datasets/
 
 # Virtual environments
-.venv
+.venv/
+venv/
+
+# Torchvision pretrained weight cache
+.torch/
+
+# HPC outputs
+slurm/logs/
+results/
+
+# Editor/tooling cruft
+.idea/
+.vscode/
+.DS_Store
