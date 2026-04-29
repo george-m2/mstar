@@ -1,8 +1,8 @@
 """Evaluate a trained SAR ATR checkpoint against clean and adversarial data.
 
-Typical invocation from a SLURM array task:
+Typical invocation from a SLURM array task (after `uv sync` / `pip install -e .`):
 
-    python attack.py \
+    sar-atr-attack \
         --dataset atrnet_star \
         --model resnet50 \
         --seed 0 \
@@ -11,6 +11,10 @@ Typical invocation from a SLURM array task:
         --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
         --data_dir /scratch/$USER/datasets/atrnet_star \
         --results_csv results/attack_results.csv
+
+Equivalent without console scripts:
+
+    python -m sar_atr.attack --dataset atrnet_star ...
 
 Each invocation appends one row to `--results_csv` containing the clean
 accuracy, adversarial accuracy, and attack hyperparameters. The attack
@@ -23,17 +27,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 import time
 from pathlib import Path
 
 import torch
 import torch.nn as nn
-
-ROOT = Path(__file__).resolve().parent
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
 
 from sar_atr.attacks import AttackSpec, build_attack
 from sar_atr.config import (

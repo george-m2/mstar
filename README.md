@@ -11,19 +11,25 @@ FGSM, PGD, and CW adversarial attacks.
 
 ```
 mstar/
-├── train.py                # CLI: train one (dataset, model, seed)
-├── attack.py               # CLI: evaluate one (model, seed, attack, eps)
-├── src/sar_atr/            # shared library (datasets, models, attacks, engine)
+├── src/sar_atr/            # installable package (datasets, models, attacks, engine)
+│   ├── train.py            # entry point exposed as `sar-atr-train`
+│   └── attack.py           # entry point exposed as `sar-atr-attack`
 ├── slurm/
 │   ├── env_setup.sh        # sourced by every SLURM job
 │   ├── slurm_train.sh      # array job: 3 models x 5 seeds = 15 tasks
 │   ├── slurm_attack.sh     # array job: 3 x 5 x 9 (attack, eps) = 135 tasks
 │   ├── submit.sh           # chains train -> attack with --dependency=afterok
 │   └── aggregate_results.sh# merge per-task attack CSVs into one file
-├── train.ipynb / eval.ipynb# original MSTAR proof-of-concept notebooks
+├── mstar/                  # original MSTAR proof-of-concept notebooks
+│   ├── train.ipynb
+│   └── eval.ipynb
 ├── pyproject.toml, uv.lock # reproducible dependency pins (managed by uv)
 └── requirements.txt        # pip fallback
 ```
+
+`uv sync` (or `pip install -e .`) installs the `sar-atr-train` and
+`sar-atr-attack` console scripts onto `$PATH` -- the SLURM jobs invoke
+those names directly.
 
 Outputs land in two top-level folders, both configurable via env var:
 
@@ -111,21 +117,27 @@ Once `.venv/` exists and data is staged, run from the project root:
 
 ## 3. Standalone Invocation (e.g. during debugging)
 
-`train.py` and `attack.py` are plain CLIs; you can run them without
-SLURM on any GPU host:
+After `uv sync` / `pip install -e .` the console scripts are on `$PATH`:
 
 ```bash
-python train.py \
+sar-atr-train \
     --dataset atrnet_star --model resnet50 --seed 0 \
     --epochs 50 --batch_size 64 \
     --data_dir /path/to/atrnet_star
 
-python attack.py \
+sar-atr-attack \
     --dataset atrnet_star --model resnet50 --seed 0 \
     --attack_type pgd --epsilon 0.02 \
     --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
     --data_dir /path/to/atrnet_star \
     --results_csv results/attack_results.csv
+```
+
+Equivalently, without installing:
+
+```bash
+PYTHONPATH=src python -m sar_atr.train --dataset atrnet_star ...
+PYTHONPATH=src python -m sar_atr.attack --dataset atrnet_star ...
 ```
 
 For a pure-MSTAR smoke test (the original proof-of-concept) swap
@@ -162,8 +174,8 @@ clean_acc, adv_acc, attack_success_rate, attack_sec, checkpoint
 
 ## 6. Preserving the MSTAR Proof-of-Concept
 
-The original `train.ipynb` / `eval.ipynb` notebooks are untouched --
-they remain the reference implementation for MSTAR results cited in
+The original notebooks live under `mstar/` (`train.ipynb`, `eval.ipynb`)
+and remain the reference implementation for MSTAR results cited in
 the proposal (99.93% clean accuracy, 0.28% under PGD eps=0.02). The
 new modular pipeline reproduces those numbers via
 `--dataset mstar --model resnet50 --seed 42`.

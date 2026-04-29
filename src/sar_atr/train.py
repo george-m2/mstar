@@ -1,14 +1,18 @@
 """Train a SAR ATR classifier with reproducible, cluster-friendly I/O.
 
-Typical invocation from a SLURM array task:
+Typical invocation from a SLURM array task (after `uv sync` / `pip install -e .`):
 
-    python train.py \
+    sar-atr-train \
         --dataset atrnet_star \
         --model resnet50 \
         --seed 0 \
         --epochs 50 \
         --batch_size 64 \
         --data_dir /scratch/$USER/datasets/atrnet_star
+
+Equivalent without console scripts:
+
+    python -m sar_atr.train --dataset atrnet_star ...
 
 Outputs (per run):
 
@@ -26,18 +30,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 import time
 from pathlib import Path
 
 import torch
 import torch.nn as nn
-
-# Make `src/` importable without requiring `pip install -e .`.
-ROOT = Path(__file__).resolve().parent
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
 
 from sar_atr.config import (
     SUPPORTED_DATASETS, SUPPORTED_MODELS,

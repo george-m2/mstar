@@ -58,7 +58,7 @@ echo "[train] batch_size=${BATCH_SIZE} grad_accum=${GRAD_ACCUM} epochs=${EPOCHS}
 echo "[train] data_dir=${DATA_DIR}"
 nvidia-smi || true
 
-srun python "${SAR_ATR_PROJECT_DIR}/train.py" \
+srun sar-atr-train \
     --dataset "${DATASET}" \
     --model "${MODEL}" \
     --seed "${SEED}" \

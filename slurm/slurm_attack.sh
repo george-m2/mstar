@@ -73,7 +73,7 @@ echo "[attack] checkpoint=${CKPT}"
 echo "[attack] results_csv=${RESULTS_CSV}"
 nvidia-smi || true
 
-srun python "${SAR_ATR_PROJECT_DIR}/attack.py" \
+srun sar-atr-attack \
     --dataset "${DATASET}" \
     --model "${MODEL}" \
     --seed "${SEED}" \
