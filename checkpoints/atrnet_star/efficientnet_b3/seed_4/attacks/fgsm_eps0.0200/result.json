@@ -1,0 +1,16 @@
+{
+  "dataset": "atrnet_star",
+  "model": "efficientnet_b3",
+  "seed": 4,
+  "attack_type": "fgsm",
+  "epsilon": 0.02,
+  "pgd_steps": null,
+  "pgd_alpha": null,
+  "cw_c": null,
+  "cw_steps": null,
+  "clean_acc": 0.9887310476710832,
+  "adv_acc": 0.4288007102854801,
+  "attack_success_rate": 0.5711992897145199,
+  "attack_sec": 86.97866559028625,
+  "checkpoint": "/springbrook/share/soc/pouhjm/mstar/checkpoints/atrnet_star/efficientnet_b3/seed_4/best_model.pth"
+}

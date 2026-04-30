@@ -1,0 +1,92 @@
+2026-04-29 13:38:57,054 | INFO | train.resnet50.s0 | args = {"model": "resnet50", "dataset": "atrnet_star", "seed": 0, "epochs": 2, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": false, "summary_csv": null}
+2026-04-29 13:38:57,071 | INFO | train.resnet50.s0 | device=cpu | cuda: unavailable
+2026-04-29 13:40:42,930 | INFO | train.resnet50.s0 | args = {"model": "resnet50", "dataset": "atrnet_star", "seed": 0, "epochs": 2, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": false, "summary_csv": null}
+2026-04-29 13:40:42,939 | INFO | train.resnet50.s0 | device=cpu | cuda: unavailable
+2026-04-29 13:47:08,873 | INFO | train.resnet50.s0 | args = {"model": "resnet50", "dataset": "atrnet_star", "seed": 0, "epochs": 2, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": false, "summary_csv": null}
+2026-04-29 13:47:08,883 | INFO | train.resnet50.s0 | device=cpu | cuda: unavailable
+2026-04-29 13:47:09,485 | INFO | train.resnet50.s0 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 13:47:10,337 | INFO | train.resnet50.s0 | model=resnet50 | params=23589992
+2026-04-29 13:52:51,642 | INFO | train.resnet50.s0 | args = {"model": "resnet50", "dataset": "atrnet_star", "seed": 0, "epochs": 50, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": true, "summary_csv": "/springbrook/share/soc/pouhjm/mstar/results/train_summary.csv"}
+2026-04-29 13:52:51,646 | INFO | train.resnet50.s0 | device=cpu | cuda: unavailable
+2026-04-29 13:52:52,160 | INFO | train.resnet50.s0 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 13:52:52,410 | INFO | train.resnet50.s0 | model=resnet50 | params=23589992
+2026-04-29 14:06:40,224 | INFO | train.resnet50.s0 | args = {"model": "resnet50", "dataset": "atrnet_star", "seed": 0, "epochs": 50, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": true, "summary_csv": "/springbrook/share/soc/pouhjm/mstar/results/train_summary.csv"}
+2026-04-29 14:06:40,321 | INFO | train.resnet50.s0 | device=cuda | cuda: NVIDIA L40 | total=47.7GB allocated=0.0GB reserved=0.0GB
+2026-04-29 14:06:40,908 | INFO | train.resnet50.s0 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 14:06:41,297 | INFO | train.resnet50.s0 | model=resnet50 | params=23589992
+2026-04-29 14:09:36,431 | INFO | train.resnet50.s0 | epoch=01/50 | train_loss=1.9627 train_acc=0.4260 | val_loss=1.7673 val_acc=0.4854
+2026-04-29 14:09:36,496 | INFO | train.resnet50.s0 | new best val acc 0.4854 -> saved best_model.pth
+2026-04-29 14:12:20,416 | INFO | train.resnet50.s0 | epoch=02/50 | train_loss=1.0065 train_acc=0.6893 | val_loss=1.2578 val_acc=0.6419
+2026-04-29 14:12:20,478 | INFO | train.resnet50.s0 | new best val acc 0.6419 -> saved best_model.pth
+2026-04-29 14:15:04,072 | INFO | train.resnet50.s0 | epoch=03/50 | train_loss=0.6697 train_acc=0.7894 | val_loss=1.7062 val_acc=0.5832
+2026-04-29 14:17:47,844 | INFO | train.resnet50.s0 | epoch=04/50 | train_loss=0.4801 train_acc=0.8475 | val_loss=0.5675 val_acc=0.8189
+2026-04-29 14:17:47,906 | INFO | train.resnet50.s0 | new best val acc 0.8189 -> saved best_model.pth
+2026-04-29 14:20:31,475 | INFO | train.resnet50.s0 | epoch=05/50 | train_loss=0.3612 train_acc=0.8842 | val_loss=0.4466 val_acc=0.8596
+2026-04-29 14:20:31,538 | INFO | train.resnet50.s0 | new best val acc 0.8596 -> saved best_model.pth
+2026-04-29 14:23:14,873 | INFO | train.resnet50.s0 | epoch=06/50 | train_loss=0.2696 train_acc=0.9136 | val_loss=0.9804 val_acc=0.7625
+2026-04-29 14:25:58,665 | INFO | train.resnet50.s0 | epoch=07/50 | train_loss=0.2110 train_acc=0.9326 | val_loss=0.5205 val_acc=0.8424
+2026-04-29 14:28:42,226 | INFO | train.resnet50.s0 | epoch=08/50 | train_loss=0.1696 train_acc=0.9454 | val_loss=0.3778 val_acc=0.8824
+2026-04-29 14:28:42,289 | INFO | train.resnet50.s0 | new best val acc 0.8824 -> saved best_model.pth
+2026-04-29 14:31:25,882 | INFO | train.resnet50.s0 | epoch=09/50 | train_loss=0.1343 train_acc=0.9567 | val_loss=0.3127 val_acc=0.8994
+2026-04-29 14:31:25,947 | INFO | train.resnet50.s0 | new best val acc 0.8994 -> saved best_model.pth
+2026-04-29 14:34:09,599 | INFO | train.resnet50.s0 | epoch=10/50 | train_loss=0.1175 train_acc=0.9624 | val_loss=0.3190 val_acc=0.9015
+2026-04-29 14:34:09,665 | INFO | train.resnet50.s0 | new best val acc 0.9015 -> saved best_model.pth
+2026-04-29 14:36:53,132 | INFO | train.resnet50.s0 | epoch=11/50 | train_loss=0.0961 train_acc=0.9693 | val_loss=1.6595 val_acc=0.7091
+2026-04-29 14:39:37,042 | INFO | train.resnet50.s0 | epoch=12/50 | train_loss=0.0849 train_acc=0.9731 | val_loss=0.4236 val_acc=0.8813
+2026-04-29 14:42:20,677 | INFO | train.resnet50.s0 | epoch=13/50 | train_loss=0.0707 train_acc=0.9773 | val_loss=0.3154 val_acc=0.9064
+2026-04-29 14:42:20,739 | INFO | train.resnet50.s0 | new best val acc 0.9064 -> saved best_model.pth
+2026-04-29 14:45:04,440 | INFO | train.resnet50.s0 | epoch=14/50 | train_loss=0.0590 train_acc=0.9816 | val_loss=0.2263 val_acc=0.9292
+2026-04-29 14:45:04,505 | INFO | train.resnet50.s0 | new best val acc 0.9292 -> saved best_model.pth
+2026-04-29 14:47:48,361 | INFO | train.resnet50.s0 | epoch=15/50 | train_loss=0.0573 train_acc=0.9815 | val_loss=0.4506 val_acc=0.8835
+2026-04-29 14:50:31,904 | INFO | train.resnet50.s0 | epoch=16/50 | train_loss=0.0481 train_acc=0.9852 | val_loss=0.2539 val_acc=0.9257
+2026-04-29 14:53:15,795 | INFO | train.resnet50.s0 | epoch=17/50 | train_loss=0.0427 train_acc=0.9864 | val_loss=0.7424 val_acc=0.8439
+2026-04-29 14:55:59,748 | INFO | train.resnet50.s0 | epoch=18/50 | train_loss=0.0382 train_acc=0.9879 | val_loss=0.3478 val_acc=0.9072
+2026-04-29 14:58:43,433 | INFO | train.resnet50.s0 | epoch=19/50 | train_loss=0.0365 train_acc=0.9885 | val_loss=0.1869 val_acc=0.9452
+2026-04-29 14:58:43,497 | INFO | train.resnet50.s0 | new best val acc 0.9452 -> saved best_model.pth
+2026-04-29 15:01:27,223 | INFO | train.resnet50.s0 | epoch=20/50 | train_loss=0.0261 train_acc=0.9914 | val_loss=0.2502 val_acc=0.9323
+2026-04-29 15:04:11,119 | INFO | train.resnet50.s0 | epoch=21/50 | train_loss=0.0243 train_acc=0.9923 | val_loss=0.2658 val_acc=0.9273
+2026-04-29 15:06:54,685 | INFO | train.resnet50.s0 | epoch=22/50 | train_loss=0.0246 train_acc=0.9923 | val_loss=0.2715 val_acc=0.9291
+2026-04-29 15:09:38,457 | INFO | train.resnet50.s0 | epoch=23/50 | train_loss=0.0203 train_acc=0.9942 | val_loss=0.1994 val_acc=0.9458
+2026-04-29 15:09:38,521 | INFO | train.resnet50.s0 | new best val acc 0.9458 -> saved best_model.pth
+2026-04-29 15:12:22,109 | INFO | train.resnet50.s0 | epoch=24/50 | train_loss=0.0179 train_acc=0.9947 | val_loss=0.2062 val_acc=0.9408
+2026-04-29 15:15:05,763 | INFO | train.resnet50.s0 | epoch=25/50 | train_loss=0.0146 train_acc=0.9959 | val_loss=0.1562 val_acc=0.9529
+2026-04-29 15:15:05,827 | INFO | train.resnet50.s0 | new best val acc 0.9529 -> saved best_model.pth
+2026-04-29 15:17:49,657 | INFO | train.resnet50.s0 | epoch=26/50 | train_loss=0.0148 train_acc=0.9952 | val_loss=0.1666 val_acc=0.9536
+2026-04-29 15:17:49,719 | INFO | train.resnet50.s0 | new best val acc 0.9536 -> saved best_model.pth
+2026-04-29 15:20:33,287 | INFO | train.resnet50.s0 | epoch=27/50 | train_loss=0.0113 train_acc=0.9966 | val_loss=0.1598 val_acc=0.9542
+2026-04-29 15:20:33,351 | INFO | train.resnet50.s0 | new best val acc 0.9542 -> saved best_model.pth
+2026-04-29 15:23:16,880 | INFO | train.resnet50.s0 | epoch=28/50 | train_loss=0.0101 train_acc=0.9970 | val_loss=0.1370 val_acc=0.9606
+2026-04-29 15:23:16,992 | INFO | train.resnet50.s0 | new best val acc 0.9606 -> saved best_model.pth
+2026-04-29 15:26:00,921 | INFO | train.resnet50.s0 | epoch=29/50 | train_loss=0.0088 train_acc=0.9976 | val_loss=0.1419 val_acc=0.9565
+2026-04-29 15:28:44,663 | INFO | train.resnet50.s0 | epoch=30/50 | train_loss=0.0068 train_acc=0.9981 | val_loss=0.2710 val_acc=0.9336
+2026-04-29 15:31:28,392 | INFO | train.resnet50.s0 | epoch=31/50 | train_loss=0.0050 train_acc=0.9987 | val_loss=0.1253 val_acc=0.9643
+2026-04-29 15:31:28,457 | INFO | train.resnet50.s0 | new best val acc 0.9643 -> saved best_model.pth
+2026-04-29 15:34:12,326 | INFO | train.resnet50.s0 | epoch=32/50 | train_loss=0.0054 train_acc=0.9985 | val_loss=0.1536 val_acc=0.9574
+2026-04-29 15:36:56,055 | INFO | train.resnet50.s0 | epoch=33/50 | train_loss=0.0046 train_acc=0.9988 | val_loss=0.1485 val_acc=0.9567
+2026-04-29 15:39:39,772 | INFO | train.resnet50.s0 | epoch=34/50 | train_loss=0.0031 train_acc=0.9992 | val_loss=0.1258 val_acc=0.9667
+2026-04-29 15:39:39,837 | INFO | train.resnet50.s0 | new best val acc 0.9667 -> saved best_model.pth
+2026-04-29 15:42:23,344 | INFO | train.resnet50.s0 | epoch=35/50 | train_loss=0.0022 train_acc=0.9994 | val_loss=0.1045 val_acc=0.9696
+2026-04-29 15:42:23,407 | INFO | train.resnet50.s0 | new best val acc 0.9696 -> saved best_model.pth
+2026-04-29 15:45:07,158 | INFO | train.resnet50.s0 | epoch=36/50 | train_loss=0.0025 train_acc=0.9993 | val_loss=0.1110 val_acc=0.9686
+2026-04-29 15:47:51,040 | INFO | train.resnet50.s0 | epoch=37/50 | train_loss=0.0013 train_acc=0.9997 | val_loss=0.1078 val_acc=0.9697
+2026-04-29 15:47:51,105 | INFO | train.resnet50.s0 | new best val acc 0.9697 -> saved best_model.pth
+2026-04-29 15:50:34,586 | INFO | train.resnet50.s0 | epoch=38/50 | train_loss=0.0017 train_acc=0.9996 | val_loss=0.1104 val_acc=0.9708
+2026-04-29 15:50:34,650 | INFO | train.resnet50.s0 | new best val acc 0.9708 -> saved best_model.pth
+2026-04-29 15:53:18,260 | INFO | train.resnet50.s0 | epoch=39/50 | train_loss=0.0007 train_acc=0.9999 | val_loss=0.0999 val_acc=0.9742
+2026-04-29 15:53:18,325 | INFO | train.resnet50.s0 | new best val acc 0.9742 -> saved best_model.pth
+2026-04-29 15:56:01,999 | INFO | train.resnet50.s0 | epoch=40/50 | train_loss=0.0007 train_acc=0.9999 | val_loss=0.1047 val_acc=0.9734
+2026-04-29 15:58:45,743 | INFO | train.resnet50.s0 | epoch=41/50 | train_loss=0.0005 train_acc=0.9999 | val_loss=0.1061 val_acc=0.9756
+2026-04-29 15:58:45,805 | INFO | train.resnet50.s0 | new best val acc 0.9756 -> saved best_model.pth
+2026-04-29 16:01:29,478 | INFO | train.resnet50.s0 | epoch=42/50 | train_loss=0.0004 train_acc=0.9999 | val_loss=0.1015 val_acc=0.9733
+2026-04-29 16:04:13,117 | INFO | train.resnet50.s0 | epoch=43/50 | train_loss=0.0003 train_acc=1.0000 | val_loss=0.0993 val_acc=0.9749
+2026-04-29 16:06:56,646 | INFO | train.resnet50.s0 | epoch=44/50 | train_loss=0.0002 train_acc=1.0000 | val_loss=0.0957 val_acc=0.9756
+2026-04-29 16:09:40,363 | INFO | train.resnet50.s0 | epoch=45/50 | train_loss=0.0002 train_acc=1.0000 | val_loss=0.0953 val_acc=0.9756
+2026-04-29 16:12:23,916 | INFO | train.resnet50.s0 | epoch=46/50 | train_loss=0.0002 train_acc=1.0000 | val_loss=0.0928 val_acc=0.9758
+2026-04-29 16:12:23,980 | INFO | train.resnet50.s0 | new best val acc 0.9758 -> saved best_model.pth
+2026-04-29 16:15:07,606 | INFO | train.resnet50.s0 | epoch=47/50 | train_loss=0.0002 train_acc=1.0000 | val_loss=0.0912 val_acc=0.9768
+2026-04-29 16:15:07,670 | INFO | train.resnet50.s0 | new best val acc 0.9768 -> saved best_model.pth
+2026-04-29 16:17:51,473 | INFO | train.resnet50.s0 | epoch=48/50 | train_loss=0.0001 train_acc=1.0000 | val_loss=0.0909 val_acc=0.9768
+2026-04-29 16:20:35,016 | INFO | train.resnet50.s0 | epoch=49/50 | train_loss=0.0001 train_acc=1.0000 | val_loss=0.0917 val_acc=0.9765
+2026-04-29 16:23:18,573 | INFO | train.resnet50.s0 | epoch=50/50 | train_loss=0.0001 train_acc=1.0000 | val_loss=0.0909 val_acc=0.9769
+2026-04-29 16:23:18,638 | INFO | train.resnet50.s0 | new best val acc 0.9769 -> saved best_model.pth
+2026-04-29 16:24:19,583 | INFO | train.resnet50.s0 | done | best_val_acc=0.9769 test_acc=0.9764 elapsed=8258.3s

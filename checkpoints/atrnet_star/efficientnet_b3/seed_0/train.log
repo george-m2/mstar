@@ -1,0 +1,85 @@
+2026-04-29 13:52:52,039 | INFO | train.efficientnet_b3.s0 | args = {"model": "efficientnet_b3", "dataset": "atrnet_star", "seed": 0, "epochs": 50, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": true, "summary_csv": "/springbrook/share/soc/pouhjm/mstar/results/train_summary.csv"}
+2026-04-29 13:52:52,043 | INFO | train.efficientnet_b3.s0 | device=cpu | cuda: unavailable
+2026-04-29 13:52:52,569 | INFO | train.efficientnet_b3.s0 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 13:52:53,817 | INFO | train.efficientnet_b3.s0 | model=efficientnet_b3 | params=10757712
+2026-04-29 14:06:40,237 | INFO | train.efficientnet_b3.s0 | args = {"model": "efficientnet_b3", "dataset": "atrnet_star", "seed": 0, "epochs": 50, "batch_size": 64, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 1, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": true, "summary_csv": "/springbrook/share/soc/pouhjm/mstar/results/train_summary.csv"}
+2026-04-29 14:06:40,358 | INFO | train.efficientnet_b3.s0 | device=cuda | cuda: NVIDIA L40 | total=47.7GB allocated=0.0GB reserved=0.0GB
+2026-04-29 14:06:40,941 | INFO | train.efficientnet_b3.s0 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 14:06:41,357 | INFO | train.efficientnet_b3.s0 | model=efficientnet_b3 | params=10757712
+2026-04-29 14:09:52,956 | INFO | train.efficientnet_b3.s0 | epoch=01/50 | train_loss=1.4405 train_acc=0.5718 | val_loss=0.6926 val_acc=0.7854
+2026-04-29 14:09:53,010 | INFO | train.efficientnet_b3.s0 | new best val acc 0.7854 -> saved best_model.pth
+2026-04-29 14:12:50,921 | INFO | train.efficientnet_b3.s0 | epoch=02/50 | train_loss=0.5840 train_acc=0.8167 | val_loss=0.4053 val_acc=0.8658
+2026-04-29 14:12:50,972 | INFO | train.efficientnet_b3.s0 | new best val acc 0.8658 -> saved best_model.pth
+2026-04-29 14:15:48,549 | INFO | train.efficientnet_b3.s0 | epoch=03/50 | train_loss=0.3662 train_acc=0.8834 | val_loss=0.3120 val_acc=0.9023
+2026-04-29 14:15:48,600 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9023 -> saved best_model.pth
+2026-04-29 14:18:46,559 | INFO | train.efficientnet_b3.s0 | epoch=04/50 | train_loss=0.2621 train_acc=0.9152 | val_loss=0.2342 val_acc=0.9227
+2026-04-29 14:18:46,610 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9227 -> saved best_model.pth
+2026-04-29 14:21:44,434 | INFO | train.efficientnet_b3.s0 | epoch=05/50 | train_loss=0.2104 train_acc=0.9327 | val_loss=0.2127 val_acc=0.9314
+2026-04-29 14:21:44,485 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9314 -> saved best_model.pth
+2026-04-29 14:24:42,521 | INFO | train.efficientnet_b3.s0 | epoch=06/50 | train_loss=0.1685 train_acc=0.9458 | val_loss=0.1800 val_acc=0.9454
+2026-04-29 14:24:42,571 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9454 -> saved best_model.pth
+2026-04-29 14:27:40,931 | INFO | train.efficientnet_b3.s0 | epoch=07/50 | train_loss=0.1460 train_acc=0.9523 | val_loss=0.1640 val_acc=0.9498
+2026-04-29 14:27:40,983 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9498 -> saved best_model.pth
+2026-04-29 14:30:38,736 | INFO | train.efficientnet_b3.s0 | epoch=08/50 | train_loss=0.1261 train_acc=0.9590 | val_loss=0.1965 val_acc=0.9445
+2026-04-29 14:33:36,668 | INFO | train.efficientnet_b3.s0 | epoch=09/50 | train_loss=0.1117 train_acc=0.9637 | val_loss=0.1794 val_acc=0.9452
+2026-04-29 14:36:34,215 | INFO | train.efficientnet_b3.s0 | epoch=10/50 | train_loss=0.0946 train_acc=0.9690 | val_loss=0.1762 val_acc=0.9501
+2026-04-29 14:36:34,267 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9501 -> saved best_model.pth
+2026-04-29 14:39:31,727 | INFO | train.efficientnet_b3.s0 | epoch=11/50 | train_loss=0.0887 train_acc=0.9712 | val_loss=0.1653 val_acc=0.9540
+2026-04-29 14:39:31,778 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9540 -> saved best_model.pth
+2026-04-29 14:42:29,886 | INFO | train.efficientnet_b3.s0 | epoch=12/50 | train_loss=0.0770 train_acc=0.9751 | val_loss=0.1495 val_acc=0.9546
+2026-04-29 14:42:29,938 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9546 -> saved best_model.pth
+2026-04-29 14:45:28,306 | INFO | train.efficientnet_b3.s0 | epoch=13/50 | train_loss=0.0747 train_acc=0.9763 | val_loss=0.1443 val_acc=0.9561
+2026-04-29 14:45:28,357 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9561 -> saved best_model.pth
+2026-04-29 14:48:26,921 | INFO | train.efficientnet_b3.s0 | epoch=14/50 | train_loss=0.0629 train_acc=0.9798 | val_loss=0.1081 val_acc=0.9677
+2026-04-29 14:48:26,972 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9677 -> saved best_model.pth
+2026-04-29 14:51:25,398 | INFO | train.efficientnet_b3.s0 | epoch=15/50 | train_loss=0.0600 train_acc=0.9807 | val_loss=0.1271 val_acc=0.9645
+2026-04-29 14:54:23,657 | INFO | train.efficientnet_b3.s0 | epoch=16/50 | train_loss=0.0490 train_acc=0.9840 | val_loss=0.1272 val_acc=0.9642
+2026-04-29 14:57:21,697 | INFO | train.efficientnet_b3.s0 | epoch=17/50 | train_loss=0.0479 train_acc=0.9847 | val_loss=0.1141 val_acc=0.9670
+2026-04-29 15:00:20,153 | INFO | train.efficientnet_b3.s0 | epoch=18/50 | train_loss=0.0449 train_acc=0.9853 | val_loss=0.1053 val_acc=0.9700
+2026-04-29 15:00:20,205 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9700 -> saved best_model.pth
+2026-04-29 15:03:18,398 | INFO | train.efficientnet_b3.s0 | epoch=19/50 | train_loss=0.0356 train_acc=0.9886 | val_loss=0.1084 val_acc=0.9681
+2026-04-29 15:06:16,922 | INFO | train.efficientnet_b3.s0 | epoch=20/50 | train_loss=0.0359 train_acc=0.9882 | val_loss=0.1060 val_acc=0.9722
+2026-04-29 15:06:16,974 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9722 -> saved best_model.pth
+2026-04-29 15:09:15,025 | INFO | train.efficientnet_b3.s0 | epoch=21/50 | train_loss=0.0316 train_acc=0.9899 | val_loss=0.1184 val_acc=0.9684
+2026-04-29 15:12:12,813 | INFO | train.efficientnet_b3.s0 | epoch=22/50 | train_loss=0.0245 train_acc=0.9921 | val_loss=0.0994 val_acc=0.9747
+2026-04-29 15:12:12,864 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9747 -> saved best_model.pth
+2026-04-29 15:15:11,015 | INFO | train.efficientnet_b3.s0 | epoch=23/50 | train_loss=0.0256 train_acc=0.9919 | val_loss=0.1041 val_acc=0.9731
+2026-04-29 15:18:09,127 | INFO | train.efficientnet_b3.s0 | epoch=24/50 | train_loss=0.0227 train_acc=0.9927 | val_loss=0.0876 val_acc=0.9769
+2026-04-29 15:18:09,179 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9769 -> saved best_model.pth
+2026-04-29 15:21:07,331 | INFO | train.efficientnet_b3.s0 | epoch=25/50 | train_loss=0.0183 train_acc=0.9942 | val_loss=0.0823 val_acc=0.9777
+2026-04-29 15:21:07,382 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9777 -> saved best_model.pth
+2026-04-29 15:24:05,697 | INFO | train.efficientnet_b3.s0 | epoch=26/50 | train_loss=0.0173 train_acc=0.9941 | val_loss=0.0966 val_acc=0.9753
+2026-04-29 15:27:03,983 | INFO | train.efficientnet_b3.s0 | epoch=27/50 | train_loss=0.0142 train_acc=0.9954 | val_loss=0.0797 val_acc=0.9793
+2026-04-29 15:27:04,034 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9793 -> saved best_model.pth
+2026-04-29 15:30:01,913 | INFO | train.efficientnet_b3.s0 | epoch=28/50 | train_loss=0.0140 train_acc=0.9956 | val_loss=0.0740 val_acc=0.9797
+2026-04-29 15:30:01,989 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9797 -> saved best_model.pth
+2026-04-29 15:33:00,455 | INFO | train.efficientnet_b3.s0 | epoch=29/50 | train_loss=0.0109 train_acc=0.9968 | val_loss=0.0934 val_acc=0.9759
+2026-04-29 15:35:58,539 | INFO | train.efficientnet_b3.s0 | epoch=30/50 | train_loss=0.0092 train_acc=0.9969 | val_loss=0.1007 val_acc=0.9766
+2026-04-29 15:38:56,768 | INFO | train.efficientnet_b3.s0 | epoch=31/50 | train_loss=0.0080 train_acc=0.9975 | val_loss=0.0818 val_acc=0.9830
+2026-04-29 15:38:56,819 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9830 -> saved best_model.pth
+2026-04-29 15:41:54,701 | INFO | train.efficientnet_b3.s0 | epoch=32/50 | train_loss=0.0081 train_acc=0.9971 | val_loss=0.0692 val_acc=0.9837
+2026-04-29 15:41:54,752 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9837 -> saved best_model.pth
+2026-04-29 15:44:53,186 | INFO | train.efficientnet_b3.s0 | epoch=33/50 | train_loss=0.0070 train_acc=0.9978 | val_loss=0.0659 val_acc=0.9850
+2026-04-29 15:44:53,238 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9850 -> saved best_model.pth
+2026-04-29 15:47:51,682 | INFO | train.efficientnet_b3.s0 | epoch=34/50 | train_loss=0.0048 train_acc=0.9983 | val_loss=0.0642 val_acc=0.9858
+2026-04-29 15:47:51,734 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9858 -> saved best_model.pth
+2026-04-29 15:50:50,114 | INFO | train.efficientnet_b3.s0 | epoch=35/50 | train_loss=0.0040 train_acc=0.9988 | val_loss=0.0689 val_acc=0.9840
+2026-04-29 15:53:48,600 | INFO | train.efficientnet_b3.s0 | epoch=36/50 | train_loss=0.0030 train_acc=0.9990 | val_loss=0.0612 val_acc=0.9849
+2026-04-29 15:56:46,901 | INFO | train.efficientnet_b3.s0 | epoch=37/50 | train_loss=0.0027 train_acc=0.9992 | val_loss=0.0656 val_acc=0.9871
+2026-04-29 15:56:46,953 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9871 -> saved best_model.pth
+2026-04-29 15:59:45,136 | INFO | train.efficientnet_b3.s0 | epoch=38/50 | train_loss=0.0023 train_acc=0.9993 | val_loss=0.0607 val_acc=0.9863
+2026-04-29 16:02:43,077 | INFO | train.efficientnet_b3.s0 | epoch=39/50 | train_loss=0.0018 train_acc=0.9994 | val_loss=0.0554 val_acc=0.9862
+2026-04-29 16:05:41,124 | INFO | train.efficientnet_b3.s0 | epoch=40/50 | train_loss=0.0018 train_acc=0.9994 | val_loss=0.0597 val_acc=0.9887
+2026-04-29 16:05:41,174 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9887 -> saved best_model.pth
+2026-04-29 16:08:39,226 | INFO | train.efficientnet_b3.s0 | epoch=41/50 | train_loss=0.0009 train_acc=0.9998 | val_loss=0.0561 val_acc=0.9875
+2026-04-29 16:11:37,492 | INFO | train.efficientnet_b3.s0 | epoch=42/50 | train_loss=0.0012 train_acc=0.9996 | val_loss=0.0563 val_acc=0.9880
+2026-04-29 16:14:36,280 | INFO | train.efficientnet_b3.s0 | epoch=43/50 | train_loss=0.0010 train_acc=0.9997 | val_loss=0.0532 val_acc=0.9890
+2026-04-29 16:14:36,331 | INFO | train.efficientnet_b3.s0 | new best val acc 0.9890 -> saved best_model.pth
+2026-04-29 16:17:35,013 | INFO | train.efficientnet_b3.s0 | epoch=44/50 | train_loss=0.0007 train_acc=0.9998 | val_loss=0.0537 val_acc=0.9883
+2026-04-29 16:20:33,424 | INFO | train.efficientnet_b3.s0 | epoch=45/50 | train_loss=0.0008 train_acc=0.9998 | val_loss=0.0537 val_acc=0.9887
+2026-04-29 16:23:32,068 | INFO | train.efficientnet_b3.s0 | epoch=46/50 | train_loss=0.0006 train_acc=0.9998 | val_loss=0.0548 val_acc=0.9890
+2026-04-29 16:26:30,509 | INFO | train.efficientnet_b3.s0 | epoch=47/50 | train_loss=0.0006 train_acc=0.9998 | val_loss=0.0528 val_acc=0.9890
+2026-04-29 16:29:28,890 | INFO | train.efficientnet_b3.s0 | epoch=48/50 | train_loss=0.0005 train_acc=0.9998 | val_loss=0.0521 val_acc=0.9887
+2026-04-29 16:32:26,810 | INFO | train.efficientnet_b3.s0 | epoch=49/50 | train_loss=0.0005 train_acc=0.9999 | val_loss=0.0535 val_acc=0.9888
+2026-04-29 16:35:25,238 | INFO | train.efficientnet_b3.s0 | epoch=50/50 | train_loss=0.0003 train_acc=0.9999 | val_loss=0.0531 val_acc=0.9885
+2026-04-29 16:36:26,715 | INFO | train.efficientnet_b3.s0 | done | best_val_acc=0.9890 test_acc=0.9874 elapsed=8985.4s

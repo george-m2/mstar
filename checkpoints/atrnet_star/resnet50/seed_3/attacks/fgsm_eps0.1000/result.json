@@ -1,0 +1,16 @@
+{
+  "dataset": "atrnet_star",
+  "model": "resnet50",
+  "seed": 3,
+  "attack_type": "fgsm",
+  "epsilon": 0.1,
+  "pgd_steps": null,
+  "pgd_alpha": null,
+  "cw_c": null,
+  "cw_steps": null,
+  "clean_acc": 0.977701133724901,
+  "adv_acc": 0.02448436006010108,
+  "attack_success_rate": 0.9755156399398989,
+  "attack_sec": 71.87006211280823,
+  "checkpoint": "/springbrook/share/soc/pouhjm/mstar/checkpoints/atrnet_star/resnet50/seed_3/best_model.pth"
+}
