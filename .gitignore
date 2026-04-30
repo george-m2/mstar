@@ -19,7 +19,6 @@ venv/
 
 # HPC outputs
 slurm/logs/
-results/
 
 # Editor/tooling cruft
 .idea/
