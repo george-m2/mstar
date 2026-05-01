@@ -1,0 +1,2 @@
+dataset,model,seed,attack_type,epsilon,pgd_steps,pgd_alpha,cw_c,cw_steps,clean_acc,adv_acc,attack_success_rate,attack_sec,checkpoint
+atrnet_star,resnet50,2,fgsm,0.02,,,,,0.9769840185766971,0.07256522333014616,0.9274347766698539,72.6589674949646,/springbrook/share/soc/pouhjm/mstar/checkpoints/atrnet_star/resnet50/seed_2/best_model.pth
