@@ -1,0 +1,16 @@
+{
+  "dataset": "atrnet_star",
+  "model": "vit_b_16",
+  "seed": 0,
+  "attack_type": "cw",
+  "epsilon": 0.0,
+  "pgd_steps": null,
+  "pgd_alpha": null,
+  "cw_c": 1.0,
+  "cw_steps": 50,
+  "clean_acc": 0.7235691845376314,
+  "adv_acc": 0.719232345308018,
+  "attack_success_rate": 0.28076765469198195,
+  "attack_sec": 916.2529146671295,
+  "checkpoint": "/springbrook/share/soc/pouhjm/mstar/checkpoints/atrnet_star/vit_b_16/seed_0/best_model.pth"
+}

@@ -1,0 +1,91 @@
+2026-04-29 14:41:10,935 | INFO | train.vit_b_16.s1 | args = {"model": "vit_b_16", "dataset": "atrnet_star", "seed": 1, "epochs": 50, "batch_size": 32, "lr": 0.001, "weight_decay": 0.0001, "data_dir": "/springbrook/share/soc/pouhjm/datasets/atrnet_star/Ground_Range/Amplitude_8bit/SOC_40classes", "output_dir": null, "num_workers": null, "image_size": 224, "atrnet_config": "SOC-40", "grad_accum_steps": 2, "early_stop_patience": 10, "no_amp": false, "no_pretrained": false, "resume": true, "summary_csv": "/springbrook/share/soc/pouhjm/mstar/results/train_summary.csv"}
+2026-04-29 14:41:11,029 | INFO | train.vit_b_16.s1 | device=cuda | cuda: NVIDIA L40 | total=47.7GB allocated=0.0GB reserved=0.0GB
+2026-04-29 14:41:11,550 | INFO | train.vit_b_16.s1 | dataset=atrnet_star | train=61282 val=6809 test=29284 classes=40
+2026-04-29 14:41:12,378 | INFO | train.vit_b_16.s1 | model=vit_b_16 | params=85829416
+2026-04-29 14:44:21,890 | INFO | train.vit_b_16.s1 | epoch=01/50 | train_loss=3.4809 train_acc=0.0723 | val_loss=3.4009 val_acc=0.0836
+2026-04-29 14:44:22,063 | INFO | train.vit_b_16.s1 | new best val acc 0.0836 -> saved best_model.pth
+2026-04-29 14:47:29,284 | INFO | train.vit_b_16.s1 | epoch=02/50 | train_loss=3.2945 train_acc=0.1120 | val_loss=3.2658 val_acc=0.1146
+2026-04-29 14:47:29,453 | INFO | train.vit_b_16.s1 | new best val acc 0.1146 -> saved best_model.pth
+2026-04-29 14:50:36,760 | INFO | train.vit_b_16.s1 | epoch=03/50 | train_loss=3.1030 train_acc=0.1505 | val_loss=2.9419 val_acc=0.1836
+2026-04-29 14:50:36,928 | INFO | train.vit_b_16.s1 | new best val acc 0.1836 -> saved best_model.pth
+2026-04-29 14:53:44,310 | INFO | train.vit_b_16.s1 | epoch=04/50 | train_loss=2.8665 train_acc=0.1970 | val_loss=2.7386 val_acc=0.2263
+2026-04-29 14:53:44,483 | INFO | train.vit_b_16.s1 | new best val acc 0.2263 -> saved best_model.pth
+2026-04-29 14:56:51,849 | INFO | train.vit_b_16.s1 | epoch=05/50 | train_loss=2.6276 train_acc=0.2515 | val_loss=2.5347 val_acc=0.2683
+2026-04-29 14:56:52,023 | INFO | train.vit_b_16.s1 | new best val acc 0.2683 -> saved best_model.pth
+2026-04-29 14:59:59,329 | INFO | train.vit_b_16.s1 | epoch=06/50 | train_loss=2.4319 train_acc=0.2956 | val_loss=2.3474 val_acc=0.3087
+2026-04-29 14:59:59,493 | INFO | train.vit_b_16.s1 | new best val acc 0.3087 -> saved best_model.pth
+2026-04-29 15:03:06,805 | INFO | train.vit_b_16.s1 | epoch=07/50 | train_loss=2.2428 train_acc=0.3398 | val_loss=2.1981 val_acc=0.3497
+2026-04-29 15:03:06,970 | INFO | train.vit_b_16.s1 | new best val acc 0.3497 -> saved best_model.pth
+2026-04-29 15:06:14,371 | INFO | train.vit_b_16.s1 | epoch=08/50 | train_loss=2.0614 train_acc=0.3882 | val_loss=2.1766 val_acc=0.3592
+2026-04-29 15:06:14,536 | INFO | train.vit_b_16.s1 | new best val acc 0.3592 -> saved best_model.pth
+2026-04-29 15:09:21,621 | INFO | train.vit_b_16.s1 | epoch=09/50 | train_loss=1.8905 train_acc=0.4331 | val_loss=1.8399 val_acc=0.4446
+2026-04-29 15:09:21,791 | INFO | train.vit_b_16.s1 | new best val acc 0.4446 -> saved best_model.pth
+2026-04-29 15:12:28,912 | INFO | train.vit_b_16.s1 | epoch=10/50 | train_loss=1.7410 train_acc=0.4740 | val_loss=1.7865 val_acc=0.4570
+2026-04-29 15:12:29,085 | INFO | train.vit_b_16.s1 | new best val acc 0.4570 -> saved best_model.pth
+2026-04-29 15:15:36,172 | INFO | train.vit_b_16.s1 | epoch=11/50 | train_loss=1.5899 train_acc=0.5145 | val_loss=1.8054 val_acc=0.4637
+2026-04-29 15:15:36,334 | INFO | train.vit_b_16.s1 | new best val acc 0.4637 -> saved best_model.pth
+2026-04-29 15:18:43,527 | INFO | train.vit_b_16.s1 | epoch=12/50 | train_loss=1.4611 train_acc=0.5496 | val_loss=1.6048 val_acc=0.5121
+2026-04-29 15:18:43,689 | INFO | train.vit_b_16.s1 | new best val acc 0.5121 -> saved best_model.pth
+2026-04-29 15:21:50,788 | INFO | train.vit_b_16.s1 | epoch=13/50 | train_loss=1.3243 train_acc=0.5886 | val_loss=1.5818 val_acc=0.5283
+2026-04-29 15:21:50,959 | INFO | train.vit_b_16.s1 | new best val acc 0.5283 -> saved best_model.pth
+2026-04-29 15:24:57,639 | INFO | train.vit_b_16.s1 | epoch=14/50 | train_loss=1.2082 train_acc=0.6175 | val_loss=1.3962 val_acc=0.5675
+2026-04-29 15:24:57,824 | INFO | train.vit_b_16.s1 | new best val acc 0.5675 -> saved best_model.pth
+2026-04-29 15:28:04,580 | INFO | train.vit_b_16.s1 | epoch=15/50 | train_loss=1.1044 train_acc=0.6504 | val_loss=1.4496 val_acc=0.5687
+2026-04-29 15:28:04,743 | INFO | train.vit_b_16.s1 | new best val acc 0.5687 -> saved best_model.pth
+2026-04-29 15:31:11,542 | INFO | train.vit_b_16.s1 | epoch=16/50 | train_loss=1.0007 train_acc=0.6800 | val_loss=1.3805 val_acc=0.5836
+2026-04-29 15:31:11,705 | INFO | train.vit_b_16.s1 | new best val acc 0.5836 -> saved best_model.pth
+2026-04-29 15:34:18,482 | INFO | train.vit_b_16.s1 | epoch=17/50 | train_loss=0.8974 train_acc=0.7123 | val_loss=1.3782 val_acc=0.5942
+2026-04-29 15:34:18,645 | INFO | train.vit_b_16.s1 | new best val acc 0.5942 -> saved best_model.pth
+2026-04-29 15:37:25,410 | INFO | train.vit_b_16.s1 | epoch=18/50 | train_loss=0.8061 train_acc=0.7385 | val_loss=1.2925 val_acc=0.6209
+2026-04-29 15:37:25,577 | INFO | train.vit_b_16.s1 | new best val acc 0.6209 -> saved best_model.pth
+2026-04-29 15:40:32,422 | INFO | train.vit_b_16.s1 | epoch=19/50 | train_loss=0.7277 train_acc=0.7625 | val_loss=1.2852 val_acc=0.6278
+2026-04-29 15:40:32,592 | INFO | train.vit_b_16.s1 | new best val acc 0.6278 -> saved best_model.pth
+2026-04-29 15:43:39,314 | INFO | train.vit_b_16.s1 | epoch=20/50 | train_loss=0.6562 train_acc=0.7847 | val_loss=1.2156 val_acc=0.6483
+2026-04-29 15:43:39,477 | INFO | train.vit_b_16.s1 | new best val acc 0.6483 -> saved best_model.pth
+2026-04-29 15:46:46,011 | INFO | train.vit_b_16.s1 | epoch=21/50 | train_loss=0.5733 train_acc=0.8108 | val_loss=1.1878 val_acc=0.6468
+2026-04-29 15:49:52,574 | INFO | train.vit_b_16.s1 | epoch=22/50 | train_loss=0.5140 train_acc=0.8293 | val_loss=1.2123 val_acc=0.6549
+2026-04-29 15:49:52,739 | INFO | train.vit_b_16.s1 | new best val acc 0.6549 -> saved best_model.pth
+2026-04-29 15:52:59,349 | INFO | train.vit_b_16.s1 | epoch=23/50 | train_loss=0.4591 train_acc=0.8468 | val_loss=1.4642 val_acc=0.6177
+2026-04-29 15:56:05,911 | INFO | train.vit_b_16.s1 | epoch=24/50 | train_loss=0.4031 train_acc=0.8644 | val_loss=1.2254 val_acc=0.6713
+2026-04-29 15:56:06,076 | INFO | train.vit_b_16.s1 | new best val acc 0.6713 -> saved best_model.pth
+2026-04-29 15:59:12,343 | INFO | train.vit_b_16.s1 | epoch=25/50 | train_loss=0.3505 train_acc=0.8828 | val_loss=1.3931 val_acc=0.6478
+2026-04-29 16:02:18,727 | INFO | train.vit_b_16.s1 | epoch=26/50 | train_loss=0.3088 train_acc=0.8966 | val_loss=1.3092 val_acc=0.6713
+2026-04-29 16:05:25,208 | INFO | train.vit_b_16.s1 | epoch=27/50 | train_loss=0.2664 train_acc=0.9099 | val_loss=1.2915 val_acc=0.6882
+2026-04-29 16:05:25,371 | INFO | train.vit_b_16.s1 | new best val acc 0.6882 -> saved best_model.pth
+2026-04-29 16:08:31,959 | INFO | train.vit_b_16.s1 | epoch=28/50 | train_loss=0.2383 train_acc=0.9202 | val_loss=1.3042 val_acc=0.6935
+2026-04-29 16:08:32,124 | INFO | train.vit_b_16.s1 | new best val acc 0.6935 -> saved best_model.pth
+2026-04-29 16:11:38,404 | INFO | train.vit_b_16.s1 | epoch=29/50 | train_loss=0.2072 train_acc=0.9301 | val_loss=1.2495 val_acc=0.7041
+2026-04-29 16:11:38,568 | INFO | train.vit_b_16.s1 | new best val acc 0.7041 -> saved best_model.pth
+2026-04-29 16:14:44,898 | INFO | train.vit_b_16.s1 | epoch=30/50 | train_loss=0.1755 train_acc=0.9408 | val_loss=1.3706 val_acc=0.6953
+2026-04-29 16:17:50,996 | INFO | train.vit_b_16.s1 | epoch=31/50 | train_loss=0.1448 train_acc=0.9508 | val_loss=1.5035 val_acc=0.6834
+2026-04-29 16:20:57,347 | INFO | train.vit_b_16.s1 | epoch=32/50 | train_loss=0.1262 train_acc=0.9576 | val_loss=1.3877 val_acc=0.7008
+2026-04-29 16:24:03,677 | INFO | train.vit_b_16.s1 | epoch=33/50 | train_loss=0.1023 train_acc=0.9656 | val_loss=1.5163 val_acc=0.6891
+2026-04-29 16:27:09,723 | INFO | train.vit_b_16.s1 | epoch=34/50 | train_loss=0.0901 train_acc=0.9701 | val_loss=1.4397 val_acc=0.7082
+2026-04-29 16:27:09,887 | INFO | train.vit_b_16.s1 | new best val acc 0.7082 -> saved best_model.pth
+2026-04-29 16:30:16,194 | INFO | train.vit_b_16.s1 | epoch=35/50 | train_loss=0.0739 train_acc=0.9758 | val_loss=1.4712 val_acc=0.7108
+2026-04-29 16:30:16,358 | INFO | train.vit_b_16.s1 | new best val acc 0.7108 -> saved best_model.pth
+2026-04-29 16:33:22,398 | INFO | train.vit_b_16.s1 | epoch=36/50 | train_loss=0.0640 train_acc=0.9786 | val_loss=1.4313 val_acc=0.7207
+2026-04-29 16:33:22,562 | INFO | train.vit_b_16.s1 | new best val acc 0.7207 -> saved best_model.pth
+2026-04-29 16:36:28,733 | INFO | train.vit_b_16.s1 | epoch=37/50 | train_loss=0.0487 train_acc=0.9841 | val_loss=1.4755 val_acc=0.7217
+2026-04-29 16:36:28,905 | INFO | train.vit_b_16.s1 | new best val acc 0.7217 -> saved best_model.pth
+2026-04-29 16:39:34,872 | INFO | train.vit_b_16.s1 | epoch=38/50 | train_loss=0.0421 train_acc=0.9858 | val_loss=1.4665 val_acc=0.7242
+2026-04-29 16:39:35,037 | INFO | train.vit_b_16.s1 | new best val acc 0.7242 -> saved best_model.pth
+2026-04-29 16:42:41,357 | INFO | train.vit_b_16.s1 | epoch=39/50 | train_loss=0.0320 train_acc=0.9899 | val_loss=1.5242 val_acc=0.7218
+2026-04-29 16:45:47,348 | INFO | train.vit_b_16.s1 | epoch=40/50 | train_loss=0.0252 train_acc=0.9918 | val_loss=1.4958 val_acc=0.7367
+2026-04-29 16:45:47,512 | INFO | train.vit_b_16.s1 | new best val acc 0.7367 -> saved best_model.pth
+2026-04-29 16:48:53,515 | INFO | train.vit_b_16.s1 | epoch=41/50 | train_loss=0.0216 train_acc=0.9930 | val_loss=1.5208 val_acc=0.7305
+2026-04-29 16:51:59,687 | INFO | train.vit_b_16.s1 | epoch=42/50 | train_loss=0.0152 train_acc=0.9954 | val_loss=1.5389 val_acc=0.7302
+2026-04-29 16:55:05,700 | INFO | train.vit_b_16.s1 | epoch=43/50 | train_loss=0.0117 train_acc=0.9967 | val_loss=1.5320 val_acc=0.7336
+2026-04-29 16:58:11,692 | INFO | train.vit_b_16.s1 | epoch=44/50 | train_loss=0.0095 train_acc=0.9974 | val_loss=1.5189 val_acc=0.7395
+2026-04-29 16:58:11,860 | INFO | train.vit_b_16.s1 | new best val acc 0.7395 -> saved best_model.pth
+2026-04-29 17:01:17,972 | INFO | train.vit_b_16.s1 | epoch=45/50 | train_loss=0.0078 train_acc=0.9980 | val_loss=1.5085 val_acc=0.7390
+2026-04-29 17:04:23,826 | INFO | train.vit_b_16.s1 | epoch=46/50 | train_loss=0.0058 train_acc=0.9985 | val_loss=1.5302 val_acc=0.7368
+2026-04-29 17:07:29,797 | INFO | train.vit_b_16.s1 | epoch=47/50 | train_loss=0.0053 train_acc=0.9987 | val_loss=1.5097 val_acc=0.7421
+2026-04-29 17:07:29,960 | INFO | train.vit_b_16.s1 | new best val acc 0.7421 -> saved best_model.pth
+2026-04-29 17:10:35,903 | INFO | train.vit_b_16.s1 | epoch=48/50 | train_loss=0.0037 train_acc=0.9993 | val_loss=1.5108 val_acc=0.7427
+2026-04-29 17:10:36,066 | INFO | train.vit_b_16.s1 | new best val acc 0.7427 -> saved best_model.pth
+2026-04-29 17:13:41,983 | INFO | train.vit_b_16.s1 | epoch=49/50 | train_loss=0.0038 train_acc=0.9992 | val_loss=1.5107 val_acc=0.7434
+2026-04-29 17:13:42,146 | INFO | train.vit_b_16.s1 | new best val acc 0.7434 -> saved best_model.pth
+2026-04-29 17:16:48,136 | INFO | train.vit_b_16.s1 | epoch=50/50 | train_loss=0.0032 train_acc=0.9995 | val_loss=1.5113 val_acc=0.7445
+2026-04-29 17:16:48,300 | INFO | train.vit_b_16.s1 | new best val acc 0.7445 -> saved best_model.pth
+2026-04-29 17:17:53,705 | INFO | train.vit_b_16.s1 | done | best_val_acc=0.7445 test_acc=0.7499 elapsed=9401.3s
