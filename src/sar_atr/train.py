@@ -1,30 +1,3 @@
-"""Train a SAR ATR classifier with reproducible, cluster-friendly I/O.
-
-Typical invocation from a SLURM array task (after `uv sync` / `pip install -e .`):
-
-    sar-atr-train \
-        --dataset atrnet_star \
-        --model resnet50 \
-        --seed 0 \
-        --epochs 50 \
-        --batch_size 64 \
-        --data_dir /scratch/$USER/datasets/atrnet_star
-
-Equivalent without console scripts:
-
-    python -m sar_atr.train --dataset atrnet_star ...
-
-Outputs (per run):
-
-    checkpoints/{dataset}/{model}/seed_{seed}/
-        best_model.pth           # model weights only; lowest val loss wins ties
-        final_model.pth          # last-epoch weights
-        resume_checkpoint.pth    # optimizer / scheduler / history (enables --resume)
-        metrics.json             # final accuracy, best-val-acc, elapsed time
-        history.json             # per-epoch train/val loss + accuracy
-        train.log                # copy of stdout
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -105,8 +78,7 @@ def main() -> int:
     logger.info("device=%s | %s", device, cuda_memory_summary())
 
     # Force torchvision pretrained-weight downloads into a shared project cache
-    # so compute nodes don't re-download and can work on networks without
-    # internet access.
+    # so nodes don't re-download weights into their local share
     os.environ.setdefault("TORCH_HOME", str(default_model_cache_dir()))
     torch.hub.set_dir(str(default_model_cache_dir()))
 
@@ -241,7 +213,6 @@ def main() -> int:
         )
 
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

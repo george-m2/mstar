@@ -1,7 +1,4 @@
-"""Evaluate a trained SAR ATR checkpoint against clean and adversarial data.
-
-Typical invocation from a SLURM array task (after `uv sync` / `pip install -e .`):
-
+"""
     sar-atr-attack \
         --dataset atrnet_star \
         --model resnet50 \
@@ -11,15 +8,6 @@ Typical invocation from a SLURM array task (after `uv sync` / `pip install -e .`
         --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
         --data_dir /scratch/$USER/datasets/atrnet_star \
         --results_csv results/attack_results.csv
-
-Equivalent without console scripts:
-
-    python -m sar_atr.attack --dataset atrnet_star ...
-
-Each invocation appends one row to `--results_csv` containing the clean
-accuracy, adversarial accuracy, and attack hyperparameters. The attack
-script is intentionally single-epsilon + single-attack per process so
-SLURM array tasks map 1:1 to (model, seed, attack, eps) combinations.
 """
 
 from __future__ import annotations
@@ -46,7 +34,22 @@ from sar_atr.utils import (
     seed_everything, select_device,
 )
 
+# SLURM job example:
+# sbatch --gres=gpu:1 --cpus-per-task=4 --mem=16G \
+#     --job-name=attack_rn50_s0_pgd02 \
+#     --output=logs/attack_rn50_s0_pgd02.out \
+#     --error=logs/attack_rn50_s0_pgd02.err \
+#     --wrap="python src/sar_atr/attack.py \
+#         --dataset atrnet_star \
+#         --model resnet50 \
+#         --seed 0 \
+#         --attack_type pgd \
+#         --epsilon 0.02 \
+#         --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
+#         --data_dir /scratch/$USER/datasets/atrnet_star \
+#         --results_csv results/attack_results.csv" 
 
+# all arguments are required except where noted
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Adversarial evaluation of a SAR ATR checkpoint.",
@@ -194,7 +197,3 @@ def main() -> int:
     )
     append_csv_row(csv_path, result)
     return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

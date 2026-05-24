@@ -1,4 +1,4 @@
-"""Shared constants and path resolution for training / attack pipelines."""
+"""Shared constants and path resolution (for use in HPC) for both pipelines"""
 
 from __future__ import annotations
 
@@ -16,21 +16,12 @@ SUPPORTED_DATASETS: tuple[str, ...] = ("mstar", "atrnet_star")
 
 def project_root() -> Path:
     return Path(os.getenv("SAR_ATR_PROJECT_DIR", Path.cwd())).resolve()
-
-
 def default_checkpoint_dir() -> Path:
     return Path(os.getenv("SAR_ATR_CHECKPOINT_DIR", project_root() / "checkpoints")).resolve()
-
-
 def default_results_dir() -> Path:
     return Path(os.getenv("SAR_ATR_RESULTS_DIR", project_root() / "results")).resolve()
-
-
 def default_model_cache_dir() -> Path:
     return Path(os.getenv("SAR_ATR_MODEL_CACHE_DIR", project_root() / ".torch")).resolve()
-
-
 def run_dir(dataset: str, model: str, seed: int, root: Path | None = None) -> Path:
-    """Directory for a single (dataset, model, seed) training run."""
     base = root or default_checkpoint_dir()
     return base / dataset / model / f"seed_{seed}"

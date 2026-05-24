@@ -1,12 +1,3 @@
-"""Model factory for ResNet-50, EfficientNet-B3, and ViT-B/16.
-
-All three backbones are loaded with ImageNet-1K pretrained weights from
-torchvision and have their final classifier head replaced with an
-`nn.Linear(..., num_classes)` layer so the pretrained feature extractor
-transfers to SAR target recognition. Inputs are expected at 224x224 RGB
-(SAR amplitude is replicated across the 3 channels by the dataset loader).
-"""
-
 from __future__ import annotations
 
 import torch.nn as nn
@@ -44,7 +35,6 @@ _BUILDERS = {
     "efficientnet_b3": _build_efficientnet_b3,
     "vit_b_16": _build_vit_b_16,
 }
-
 
 def build_model(name: str, num_classes: int, pretrained: bool = True) -> nn.Module:
     if name not in _BUILDERS:

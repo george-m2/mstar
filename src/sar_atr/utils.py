@@ -1,5 +1,3 @@
-"""Miscellaneous helpers: seeding, device selection, JSON/CSV logging."""
-
 from __future__ import annotations
 
 import csv
@@ -15,13 +13,9 @@ import torch
 
 
 def seed_everything(seed: int) -> None:
-    """Seed Python, NumPy, and PyTorch (including CUDA) for reproducibility.
-
-    We intentionally do NOT toggle `torch.backends.cudnn.deterministic = True`
-    globally -- that can halve training throughput on L40. Set the env var
-    `SAR_ATR_DETERMINISTIC=1` to enable it when bit-exact reproducibility is
-    required (e.g. for debugging).
-    """
+    # do NOT toggle `torch.backends.cudnn.deterministic = True` globally
+    # can halve training throughput on L40? Set the env var
+    # `SAR_ATR_DETERMINISTIC=1` to enable reproducibility 
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -37,7 +31,7 @@ def seed_everything(seed: int) -> None:
 def select_device() -> torch.device:
     if torch.cuda.is_available():
         return torch.device("cuda")
-    # MPS support kept for local Mac dev; cluster will always hit the CUDA branch.
+    # MPS support kept for local Apple silicon dev; cluster will always hit the CUDA branch.
     if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
         return torch.device("mps")
     return torch.device("cpu")
@@ -67,13 +61,6 @@ def save_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 def append_csv_row(path: Path, row: dict[str, Any]) -> None:
-    """Append `row` to `path`, writing a header if the file is new.
-
-    Safe for repeated calls from different SLURM array tasks because we open
-    in append mode and write the header only when the file does not exist.
-    Concurrent writes from many tasks may still interleave; the SLURM scripts
-    use per-task CSVs that are aggregated after the array completes.
-    """
     path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = list(row.keys())
     write_header = not path.exists() or path.stat().st_size == 0
@@ -85,6 +72,7 @@ def append_csv_row(path: Path, row: dict[str, Any]) -> None:
 
 
 def cuda_memory_summary() -> str:
+    # so what does this cluster look like?
     if not torch.cuda.is_available():
         return "cuda: unavailable"
     props = torch.cuda.get_device_properties(0)

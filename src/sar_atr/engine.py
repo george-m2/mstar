@@ -1,5 +1,3 @@
-"""Training and evaluation loops shared by `train.py` and `attack.py`."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -50,16 +48,16 @@ def train_one_epoch(
     grad_accum_steps: int = 1,
     desc: str = "Training",
 ) -> EpochResult:
-    """Single training epoch with optional mixed precision and grad accumulation.
 
-    `grad_accum_steps > 1` lets ViT-B fit into L40 VRAM by splitting each
-    effective batch across multiple forward/backward passes before stepping.
-    """
+    # `grad_accum_steps > 1` lets ViT-B fit into L40 VRAM by splitting each 
+    # effective batch across multiple forward/backward passes before stepping.
+    
     model.train()
     total_loss, correct, total = 0.0, 0, 0
     amp_enabled = use_amp and device.type == "cuda"
     # `torch.amp.GradScaler("cuda", ...)` is the torch 2.4+ API; fall back to
     # the legacy namespace for older torches so this file stays portable.
+    # no idea what API version ill have...
     try:
         scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
     except (TypeError, AttributeError):
@@ -91,7 +89,7 @@ def train_one_epoch(
         correct += predicted.eq(labels).sum().item()
         total += labels.size(0)
 
-    # Flush any trailing partial accumulation so training state matches the loss.
+    # training state MUST match the loss.
     if step_in_accum > 0:
         scaler.step(optimizer)
         scaler.update()
@@ -129,7 +127,6 @@ def evaluate_adversarial(
     device: torch.device,
     desc: str = "Attacking",
 ) -> float:
-    """Return accuracy under the given attack."""
     model.eval()
     correct, total = 0, 0
     for images, labels in tqdm(loader, desc=desc, leave=False):
@@ -143,11 +140,7 @@ def evaluate_adversarial(
             total += labels.size(0)
     return correct / max(total, 1)
 
-
-# ---------------------------------------------------------------------------
-# Checkpoint I/O
-# ---------------------------------------------------------------------------
-
+# CHECKPOINTING
 
 def save_full_checkpoint(
     path: Path,
@@ -161,7 +154,6 @@ def save_full_checkpoint(
     class_names: list[str],
     extra: dict | None = None,
 ) -> None:
-    """Atomic save: write to temp file, then rename."""
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "epoch": epoch,
@@ -178,7 +170,6 @@ def save_full_checkpoint(
     tmp = path.with_suffix(path.suffix + ".tmp")
     torch.save(payload, tmp)
     tmp.replace(path)
-
 
 def save_weights_only(path: Path, model: nn.Module) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)

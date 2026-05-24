@@ -1,13 +1,3 @@
-"""Dataset loaders for MSTAR and ATRNet-STAR.
-
-MSTAR -- single flat directory of class folders (`Padded_imgs/<class>/*.jpg`).
-ATRNet-STAR -- pre-split hierarchy `<root>/<experimental_config>/{train,test}/<class>/*.tif`
-(see https://github.com/waterdisappear/ATRNet-STAR). We default to the SOC-40
-configuration, which is the combined full open-source release.
-
-Both loaders return (train_loader, val_loader, test_loader, class_names).
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -34,11 +24,10 @@ class DataLoaders:
 def _rgb_loader(path: str) -> Image.Image:
     # ATRNet-STAR 8-bit amplitude is single-channel TIFF; ImageFolder's default
     # PIL loader opens as "L" for those. We explicitly convert to RGB so the
-    # 3-channel ImageNet-pretrained backbones Just Work (R=G=B=amplitude).
+    # same model architectures and transforms can be used for both datasets.
     with open(path, "rb") as f:
         img = Image.open(f)
         return img.convert("RGB")
-
 
 def build_transforms(
     image_size: int = 224,
@@ -128,7 +117,7 @@ def load_mstar(
     train_ds, val_ds, test_ds = random_split(full, [n_train, n_val, n_test], generator=gen)
 
     # random_split returns Subsets sharing `full`; swap in the deterministic
-    # test transform for the eval subsets so there's no augmentation leakage.
+    # test, transform for the eval subsets
     eval_ds = datasets.ImageFolder(str(data_dir), transform=test_tf)
     if eval_ds.classes != full.classes or eval_ds.samples != full.samples:
         raise RuntimeError(
@@ -153,13 +142,7 @@ def load_atrnet_star(
     val_fraction: float = 0.10,
     experimental_config: str = "SOC-40",
 ) -> DataLoaders:
-    """ATRNet-STAR loader using the dataset's pre-split train/test folders.
 
-    The provided train split is further partitioned into train/val using `seed`
-    and `val_fraction`, so val/test are disjoint. `data_dir` may point to
-    either the archive root (containing the experimental-config folder) or
-    directly at the experimental-config folder itself.
-    """
     root = Path(data_dir)
     candidates = [root / experimental_config, root]
     cfg_root = next((c for c in candidates if (c / "train").is_dir() and (c / "test").is_dir()), None)
@@ -185,7 +168,7 @@ def load_atrnet_star(
             "Train/test class lists disagree for ATRNet-STAR -- dataset integrity problem."
         )
 
-    # Carve a seed-dependent validation slice out of the train split.
+    # seed-dependent slice out of the train split.
     n_val = int(val_fraction * len(train_full))
     n_train = len(train_full) - n_val
     gen = torch.Generator().manual_seed(seed)
