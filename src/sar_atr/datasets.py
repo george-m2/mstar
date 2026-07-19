@@ -190,6 +190,55 @@ def load_atrnet_star(
     )
 
 
+def _dataset_targets(ds) -> list[int]:
+    if isinstance(ds, Subset):
+        parent = _dataset_targets(ds.dataset)
+        return [parent[i] for i in ds.indices]
+    return list(ds.targets)
+
+
+def stratified_subset_loader(
+    loader: DataLoader,
+    size: int,
+    seed: int = 0,
+) -> DataLoader:
+    """Deterministic class-stratified subset of an evaluation DataLoader.
+
+    AutoAttack's targeted components are ~50x the cost of PGD-20 on points the
+    model still classifies correctly; evaluating on a fixed stratified subset
+    (RobustBench-style, e.g. 5000 images) keeps the grid inside HPC walltime.
+    The subset is a function of (dataset, size, seed) only, so every model and
+    attack sees the same images.
+    """
+    ds = loader.dataset
+    targets = _dataset_targets(ds)
+    n_total = len(targets)
+    if size >= n_total:
+        return loader
+
+    by_class: dict[int, list[int]] = {}
+    for idx, t in enumerate(targets):
+        by_class.setdefault(int(t), []).append(idx)
+
+    gen = torch.Generator().manual_seed(seed)
+    chosen: list[int] = []
+    # Proportional allocation with at least one example per class.
+    for cls in sorted(by_class):
+        idxs = by_class[cls]
+        take = max(1, round(size * len(idxs) / n_total))
+        perm = torch.randperm(len(idxs), generator=gen).tolist()
+        chosen.extend(idxs[i] for i in perm[:take])
+    chosen = sorted(chosen[:size] if len(chosen) > size else chosen)
+
+    return DataLoader(
+        Subset(ds, chosen),
+        batch_size=loader.batch_size,
+        shuffle=False,
+        num_workers=loader.num_workers,
+        pin_memory=loader.pin_memory,
+    )
+
+
 def load_dataset(
     dataset: str,
     data_dir: Path,
