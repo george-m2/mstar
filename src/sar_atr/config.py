@@ -15,9 +15,11 @@ SUPPORTED_DATASETS: tuple[str, ...] = ("mstar", "atrnet_star")
 
 # Per-architecture fine-tuning recipes. The uniform AdamW lr=1e-3 recipe that
 # worked for the CNNs destroys ViT-B/16's pretrained features (74.7% test acc,
-# train acc 99.9% (catastrophic forgetting followed by memorisation), so ViT
+# train acc 99.9% -- catastrophic forgetting followed by memorisation), so ViT
 # gets the standard transformer fine-tuning treatment: low LR, warmup,
-# layer-wise LR decay, and label smoothing 
+# layer-wise LR decay, and label smoothing. CNN recipes are unchanged so
+# results from earlier runs remain valid. Any of these can be overridden from
+# the CLI; a None field falls back to the recipe value.
 TRAIN_RECIPES: dict[str, dict] = {
     "resnet50": {
         "lr": 1e-3, "weight_decay": 1e-4, "label_smoothing": 0.0,

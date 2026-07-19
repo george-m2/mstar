@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 
 from sar_atr.config import (
-    SUPPORTED_DATASETS, SUPPORTED_MODELS,
+    SUPPORTED_DATASETS, SUPPORTED_MODELS, TRAIN_RECIPES,
     default_model_cache_dir, run_dir,
 )
 from sar_atr.datasets import load_dataset
@@ -18,11 +18,37 @@ from sar_atr.engine import (
     TrainHistory, evaluate, save_full_checkpoint, save_weights_only,
     train_one_epoch,
 )
-from sar_atr.models import build_model, count_parameters
+from sar_atr.models import build_model, build_param_groups, count_parameters
 from sar_atr.utils import (
-    append_csv_row, cuda_memory_summary, get_logger, save_json,
-    seed_everything, select_device,
+    append_csv_row, cuda_memory_summary, cuda_peak_memory_gb, get_logger,
+    reset_cuda_peak_stats, save_json, seed_everything, select_device,
 )
+
+
+def resolve_recipe(args: argparse.Namespace) -> dict:
+    """Fill any hyperparameter left as None from the per-architecture recipe."""
+    recipe = dict(TRAIN_RECIPES[args.model])
+    for key in recipe:
+        cli_value = getattr(args, key, None)
+        if cli_value is not None:
+            recipe[key] = cli_value
+    return recipe
+
+
+def build_scheduler(
+    optimizer: torch.optim.Optimizer, epochs: int, warmup_epochs: int,
+) -> torch.optim.lr_scheduler.LRScheduler:
+    cosine = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=max(epochs - warmup_epochs, 1),
+    )
+    if warmup_epochs <= 0:
+        return cosine
+    warmup = torch.optim.lr_scheduler.LinearLR(
+        optimizer, start_factor=1e-2, total_iters=warmup_epochs,
+    )
+    return torch.optim.lr_scheduler.SequentialLR(
+        optimizer, [warmup, cosine], milestones=[warmup_epochs],
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -35,8 +61,15 @@ def parse_args() -> argparse.Namespace:
                    help="Seed for the full pipeline (reproducibility + data split).")
     p.add_argument("--epochs", type=int, default=50)
     p.add_argument("--batch_size", type=int, default=64)
-    p.add_argument("--lr", type=float, default=1e-3)
-    p.add_argument("--weight_decay", type=float, default=1e-4)
+    # Optimisation hyperparameters default to the per-architecture recipe in
+    # config.TRAIN_RECIPES; pass a value to override.
+    p.add_argument("--lr", type=float, default=None)
+    p.add_argument("--weight_decay", type=float, default=None)
+    p.add_argument("--label_smoothing", type=float, default=None)
+    p.add_argument("--warmup_epochs", type=int, default=None,
+                   help="Linear LR warmup epochs before the cosine schedule.")
+    p.add_argument("--layer_decay", type=float, default=None,
+                   help="Layer-wise LR decay factor (ViT only).")
     p.add_argument("--data_dir", type=Path, required=True,
                    help="MSTAR `Padded_imgs/` or ATRNet-STAR archive/config root.")
     p.add_argument("--output_dir", type=Path, default=None,
@@ -73,8 +106,12 @@ def main() -> int:
     logger = get_logger(f"train.{args.model}.s{args.seed}", log_file=out_dir / "train.log")
     logger.info("args = %s", json.dumps(vars(args), default=str))
 
+    recipe = resolve_recipe(args)
+    logger.info("recipe = %s", json.dumps(recipe))
+
     seed_everything(args.seed)
     device = select_device()
+    reset_cuda_peak_stats()
     logger.info("device=%s | %s", device, cuda_memory_summary())
 
     # Force torchvision pretrained-weight downloads into a shared project cache
@@ -103,13 +140,15 @@ def main() -> int:
     ).to(device)
     logger.info("model=%s | params=%d", args.model, count_parameters(model))
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(
-        model.parameters(), lr=args.lr, weight_decay=args.weight_decay,
+    criterion = nn.CrossEntropyLoss(label_smoothing=recipe["label_smoothing"])
+    param_groups = build_param_groups(
+        model, args.model,
+        base_lr=recipe["lr"],
+        weight_decay=recipe["weight_decay"],
+        layer_decay=recipe["layer_decay"],
     )
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        optimizer, T_max=args.epochs,
-    )
+    optimizer = torch.optim.AdamW(param_groups, lr=recipe["lr"])
+    scheduler = build_scheduler(optimizer, args.epochs, recipe["warmup_epochs"])
 
     history = TrainHistory()
     best_val_acc = 0.0
@@ -188,6 +227,7 @@ def main() -> int:
     test_res = evaluate(model, data.test, criterion, device, desc="final test")
     elapsed_sec = time.time() - start_time
 
+    peak_gb = cuda_peak_memory_gb()
     summary = {
         "dataset": args.dataset,
         "model": args.model,
@@ -198,18 +238,21 @@ def main() -> int:
         "test_loss": float(test_res.loss),
         "test_acc": float(test_res.accuracy),
         "elapsed_sec": float(elapsed_sec),
+        "recipe": recipe,
+        "peak_vram_gb": peak_gb,
         "class_names": data.class_names,
     }
     save_json(out_dir / "metrics.json", summary)
     logger.info(
-        "done | best_val_acc=%.4f test_acc=%.4f elapsed=%.1fs",
+        "done | best_val_acc=%.4f test_acc=%.4f elapsed=%.1fs peak_vram=%s",
         best_val_acc, test_res.accuracy, elapsed_sec,
+        f"{peak_gb:.1f}GB" if peak_gb is not None else "n/a",
     )
 
     if args.summary_csv is not None:
         append_csv_row(
             args.summary_csv,
-            {k: summary[k] for k in summary if k != "class_names"},
+            {k: summary[k] for k in summary if k not in ("class_names", "recipe")},
         )
 
     return 0

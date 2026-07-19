@@ -126,9 +126,21 @@ def evaluate_adversarial(
     attack_fn: Callable[[torch.Tensor, torch.Tensor], torch.Tensor],
     device: torch.device,
     desc: str = "Attacking",
-) -> float:
+    return_perturbation_stats: bool = False,
+) -> float | tuple[float, dict]:
+    """Adversarial accuracy; optionally also perturbation-norm statistics.
+
+    With `return_perturbation_stats=True`, returns (accuracy, stats) where
+    stats holds pixel-space L2/L-inf norms of successful perturbations. For
+    minimum-distortion attacks (CW) the median L2 is the headline number; for
+    budget-constrained attacks it is a sanity check that the budget held.
+    """
+    from .attacks import perturbation_norms  # local import to avoid a cycle
+
     model.eval()
     correct, total = 0, 0
+    success_l2: list[torch.Tensor] = []
+    success_linf: list[torch.Tensor] = []
     for images, labels in tqdm(loader, desc=desc, leave=False):
         images = images.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
@@ -138,7 +150,82 @@ def evaluate_adversarial(
             _, predicted = outputs.max(1)
             correct += predicted.eq(labels).sum().item()
             total += labels.size(0)
-    return correct / max(total, 1)
+            if return_perturbation_stats:
+                l2, linf = perturbation_norms(images, adv)
+                fooled = ~predicted.eq(labels)
+                success_l2.append(l2[fooled].cpu())
+                success_linf.append(linf[fooled].cpu())
+
+    accuracy = correct / max(total, 1)
+    if not return_perturbation_stats:
+        return accuracy
+
+    if success_l2 and (all_l2 := torch.cat(success_l2)).numel() > 0:
+        all_linf = torch.cat(success_linf)
+        stats = {
+            "n_success": int(all_l2.numel()),
+            "l2_median": float(all_l2.median()),
+            "l2_mean": float(all_l2.mean()),
+            "linf_median": float(all_linf.median()),
+            "linf_max": float(all_linf.max()),
+        }
+    else:
+        stats = {
+            "n_success": 0, "l2_median": None, "l2_mean": None,
+            "linf_median": None, "linf_max": None,
+        }
+    return accuracy, stats
+
+
+def train_one_epoch_adversarial(
+    model: nn.Module,
+    loader: DataLoader,
+    criterion: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    device: torch.device,
+    attack_fn: Callable[[torch.Tensor, torch.Tensor], torch.Tensor],
+    use_amp: bool = True,
+    desc: str = "AT train",
+) -> EpochResult:
+    """One epoch of Madry-style adversarial training.
+
+    The model trains purely on adversarial examples. Crafting runs with the
+    model in eval mode so BatchNorm batch statistics are frozen and running
+    stats are not updated k extra times per batch; the update step runs in
+    train mode as usual. Reported accuracy is on the adversarial examples.
+    """
+    total_loss, correct, total = 0.0, 0, 0
+    amp_enabled = use_amp and device.type == "cuda"
+    try:
+        scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
+    except (TypeError, AttributeError):
+        scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled)  # type: ignore[attr-defined]
+
+    for images, labels in tqdm(loader, desc=desc, leave=False):
+        images = images.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
+
+        model.eval()
+        adv = attack_fn(images, labels)
+        model.train()
+
+        optimizer.zero_grad(set_to_none=True)
+        with torch.amp.autocast(
+            device_type="cuda" if device.type == "cuda" else "cpu",
+            enabled=amp_enabled,
+        ):
+            outputs = model(adv)
+            loss = criterion(outputs, labels)
+        scaler.scale(loss).backward()
+        scaler.step(optimizer)
+        scaler.update()
+
+        total_loss += loss.item() * images.size(0)
+        _, predicted = outputs.max(1)
+        correct += predicted.eq(labels).sum().item()
+        total += labels.size(0)
+
+    return EpochResult(loss=total_loss / max(total, 1), accuracy=correct / max(total, 1))
 
 # CHECKPOINTING
 

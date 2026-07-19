@@ -83,3 +83,19 @@ def cuda_memory_summary() -> str:
         f"cuda: {props.name} | total={total_gb:.1f}GB "
         f"allocated={alloc_gb:.1f}GB reserved={reserved_gb:.1f}GB"
     )
+
+
+def reset_cuda_peak_stats() -> None:
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
+
+
+def cuda_peak_memory_gb() -> float | None:
+    """Peak VRAM allocated since the last reset, in GB. None off-GPU.
+
+    Log this at job end: the startup-only memory line in earlier runs never
+    captured actual usage, which left nothing to size HPC requests with.
+    """
+    if not torch.cuda.is_available():
+        return None
+    return torch.cuda.max_memory_allocated() / 1e9
