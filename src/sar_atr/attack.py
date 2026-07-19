@@ -21,17 +21,17 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
-from sar_atr.attacks import AttackSpec, build_attack
+from sar_atr.attacks import AttackSpec, build_attack, resolve_pgd_alpha
 from sar_atr.config import (
     SUPPORTED_ATTACKS, SUPPORTED_DATASETS, SUPPORTED_MODELS,
     default_model_cache_dir, default_results_dir, run_dir,
 )
-from sar_atr.datasets import load_dataset
+from sar_atr.datasets import load_dataset, stratified_subset_loader
 from sar_atr.engine import evaluate, evaluate_adversarial
 from sar_atr.models import build_model
 from sar_atr.utils import (
-    append_csv_row, cuda_memory_summary, get_logger, save_json,
-    seed_everything, select_device,
+    append_csv_row, cuda_memory_summary, cuda_peak_memory_gb, get_logger,
+    reset_cuda_peak_stats, save_json, seed_everything, select_device,
 )
 
 # SLURM job example:
@@ -70,11 +70,17 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--atrnet_config", default="SOC-40")
     # Attack hyperparameters
     p.add_argument("--pgd_steps", type=int, default=20)
-    p.add_argument("--pgd_alpha", type=float, default=0.01)
+    p.add_argument("--pgd_alpha", type=float, default=None,
+                   help="PGD step size; defaults to 2.5*eps/steps.")
     p.add_argument("--cw_steps", type=int, default=50)
     p.add_argument("--cw_c", type=float, default=1.0)
     p.add_argument("--cw_kappa", type=float, default=0.0)
     p.add_argument("--cw_lr", type=float, default=0.01)
+    p.add_argument("--aa_version", default="standard", choices=("standard", "rand"),
+                   help="AutoAttack version.")
+    p.add_argument("--subset_size", type=int, default=None,
+                   help="Evaluate on a fixed class-stratified test subset. "
+                        "Recommended 5000 for AutoAttack; unset = full test set.")
     # Outputs
     p.add_argument("--results_csv", type=Path, default=None,
                    help="Append a summary row here. Defaults to results/attack_results.csv.")
@@ -115,6 +121,7 @@ def main() -> int:
 
     seed_everything(args.seed)
     device = select_device()
+    reset_cuda_peak_stats()
     logger.info("device=%s | %s", device, cuda_memory_summary())
 
     os.environ.setdefault("TORCH_HOME", str(default_model_cache_dir()))
@@ -130,9 +137,15 @@ def main() -> int:
         image_size=args.image_size,
         atrnet_config=args.atrnet_config,
     )
+    test_loader = data.test
+    if args.subset_size is not None:
+        # Fixed function of (dataset, size, seed=0): every model/attack pair
+        # sees the same images, so subset numbers are comparable across runs.
+        test_loader = stratified_subset_loader(test_loader, args.subset_size, seed=0)
     logger.info(
-        "dataset=%s test=%d classes=%d",
-        args.dataset, len(data.test.dataset), data.num_classes,
+        "dataset=%s test=%d (of %d) classes=%d",
+        args.dataset, len(test_loader.dataset), len(data.test.dataset),
+        data.num_classes,
     )
 
     model = build_model(
@@ -148,29 +161,34 @@ def main() -> int:
 
     clean_acc: float | None = None
     if not args.skip_clean_eval:
-        clean_res = evaluate(model, data.test, criterion, device, desc="clean")
+        clean_res = evaluate(model, test_loader, criterion, device, desc="clean")
         clean_acc = float(clean_res.accuracy)
         logger.info("clean_acc=%.4f", clean_acc)
 
+    pgd_alpha = resolve_pgd_alpha(args.epsilon, args.pgd_steps, args.pgd_alpha)
     spec = AttackSpec(
         name=args.attack_type,
         epsilon=args.epsilon,
         steps=args.cw_steps if args.attack_type == "cw" else args.pgd_steps,
-        alpha=args.pgd_alpha,
+        alpha=pgd_alpha,
         cw_c=args.cw_c,
         cw_kappa=args.cw_kappa,
         cw_lr=args.cw_lr,
+        n_classes=data.num_classes,
+        aa_version=args.aa_version,
     )
     attack_fn = build_attack(spec, model)
 
     t0 = time.time()
-    adv_acc = evaluate_adversarial(
-        model, data.test, attack_fn, device,
+    adv_acc, pert_stats = evaluate_adversarial(
+        model, test_loader, attack_fn, device,
         desc=f"{args.attack_type} eps={args.epsilon}",
+        return_perturbation_stats=True,
     )
     attack_sec = time.time() - t0
 
     attack_success_rate = 1.0 - adv_acc
+    peak_gb = cuda_peak_memory_gb()
 
     result = {
         "dataset": args.dataset,
@@ -179,21 +197,37 @@ def main() -> int:
         "attack_type": args.attack_type,
         "epsilon": float(args.epsilon),
         "pgd_steps": int(args.pgd_steps) if args.attack_type == "pgd" else None,
-        "pgd_alpha": float(args.pgd_alpha) if args.attack_type == "pgd" else None,
+        "pgd_alpha": float(pgd_alpha) if args.attack_type == "pgd" else None,
         "cw_c": float(args.cw_c) if args.attack_type == "cw" else None,
         "cw_steps": int(args.cw_steps) if args.attack_type == "cw" else None,
+        "aa_version": args.aa_version if args.attack_type == "autoattack" else None,
+        "n_eval": len(test_loader.dataset),
+        "subset_size": args.subset_size,
         "clean_acc": clean_acc,
         "adv_acc": float(adv_acc),
         "attack_success_rate": float(attack_success_rate),
+        # Pixel-space perturbation norms over successful attacks. For CW the
+        # median L2 is the reportable statistic; for L-inf attacks linf_max
+        # confirms the budget was respected.
+        "pert_n_success": pert_stats["n_success"],
+        "pert_l2_median": pert_stats["l2_median"],
+        "pert_l2_mean": pert_stats["l2_mean"],
+        "pert_linf_median": pert_stats["linf_median"],
+        "pert_linf_max": pert_stats["linf_max"],
         "attack_sec": float(attack_sec),
+        "peak_vram_gb": peak_gb,
         "checkpoint": str(ckpt_path),
     }
     save_json(json_path, result)
     logger.info(
-        "attack=%s eps=%.4f | clean_acc=%s adv_acc=%.4f asr=%.4f time=%.1fs",
+        "attack=%s eps=%.4f | clean_acc=%s adv_acc=%.4f asr=%.4f "
+        "l2_median=%s time=%.1fs peak_vram=%s",
         args.attack_type, args.epsilon,
         f"{clean_acc:.4f}" if clean_acc is not None else "skipped",
-        adv_acc, attack_success_rate, attack_sec,
+        adv_acc, attack_success_rate,
+        f"{pert_stats['l2_median']:.3f}" if pert_stats["l2_median"] is not None else "n/a",
+        attack_sec,
+        f"{peak_gb:.1f}GB" if peak_gb is not None else "n/a",
     )
     append_csv_row(csv_path, result)
     return 0
