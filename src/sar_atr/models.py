@@ -8,11 +8,6 @@ from .config import SUPPORTED_MODELS
 
 class AConvNet(nn.Module):
     """All-convolutional SAR-ATR network of Chen et al. (2016).
-
-    Faithful to the original at 88x88 input, where conv5 produces a 1x1
-    spatial map of class logits. At other input sizes the logit map is
-    global-average-pooled instead, keeping the network all-convolutional.
-    Trained from scratch: there are no pretrained weights by design.
     """
 
     def __init__(self, num_classes: int, in_channels: int = 3) -> None:
@@ -59,8 +54,6 @@ def _build_vit_b_16(num_classes: int, pretrained: bool) -> nn.Module:
 
 
 def _build_aconvnet(num_classes: int, pretrained: bool) -> nn.Module:
-    # `pretrained` is accepted for interface uniformity but ignored: the
-    # SAR-native baseline is deliberately trained from scratch.
     return AConvNet(num_classes)
 
 
@@ -101,14 +94,6 @@ def build_param_groups(
     weight_decay: float,
     layer_decay: float | None = None,
 ) -> list[dict]:
-    """Optimizer parameter groups, with layer-wise LR decay for ViT.
-
-    With `layer_decay=None` this returns a single group identical to passing
-    `model.parameters()` directly, so the CNN pipeline is unchanged from the
-    original runs. For ViT, each depth level gets lr = base_lr * decay^(depth
-    from head), and 1-D params (biases, norm weights) plus the class token and
-    positional embedding are excluded from weight decay.
-    """
     if layer_decay is None:
         return [{"params": list(model.parameters()), "lr": base_lr, "weight_decay": weight_decay}]
 

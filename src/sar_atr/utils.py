@@ -14,8 +14,7 @@ import torch
 
 def seed_everything(seed: int) -> None:
     # do NOT toggle `torch.backends.cudnn.deterministic = True` globally
-    # can halve training throughput on L40? Set the env var
-    # `SAR_ATR_DETERMINISTIC=1` to enable reproducibility 
+    # can halve training throughput on L40? 
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -31,7 +30,7 @@ def seed_everything(seed: int) -> None:
 def select_device() -> torch.device:
     if torch.cuda.is_available():
         return torch.device("cuda")
-    # MPS support kept for local Apple silicon dev; cluster will always hit the CUDA branch.
+    # MPS support kept for local Apple silicon. If you are unsure, assume it is CUDA. 
     if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
         return torch.device("mps")
     return torch.device("cpu")
@@ -91,11 +90,6 @@ def reset_cuda_peak_stats() -> None:
 
 
 def cuda_peak_memory_gb() -> float | None:
-    """Peak VRAM allocated since the last reset, in GB. None off-GPU.
-
-    Log this at job end: the startup-only memory line in earlier runs never
-    captured actual usage, which left nothing to size HPC requests with.
-    """
     if not torch.cuda.is_available():
         return None
     return torch.cuda.max_memory_allocated() / 1e9

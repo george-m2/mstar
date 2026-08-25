@@ -53,7 +53,7 @@ def build_scheduler(
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Train a SAR ATR classifier on MSTAR or ATRNet-STAR.",
+        description="Train a SAR ATR classifier on MSTAR/ATRNet-STAR.",
     )
     p.add_argument("--model", required=True, choices=SUPPORTED_MODELS)
     p.add_argument("--dataset", default="atrnet_star", choices=SUPPORTED_DATASETS)
@@ -113,9 +113,6 @@ def main() -> int:
     device = select_device()
     reset_cuda_peak_stats()
     logger.info("device=%s | %s", device, cuda_memory_summary())
-
-    # Force torchvision pretrained-weight downloads into a shared project cache
-    # so nodes don't re-download weights into their local share
     os.environ.setdefault("TORCH_HOME", str(default_model_cache_dir()))
     torch.hub.set_dir(str(default_model_cache_dir()))
 

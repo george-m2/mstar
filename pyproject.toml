@@ -1,7 +1,7 @@
 [project]
 name = "mstar"
 version = "0.2.0"
-description = "Adversarial vulnerability evaluation of SAR ATR systems across a domain gap (MSTAR -> ATRNet-STAR)."
+description = "Adversarial vulnerability evaluation of SAR-ATR classifers."
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
@@ -22,7 +22,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # timm gives us ViT-B and EfficientNet-B3 with more modern pretraining recipes
-# than torchvision. Optional so that a slim install still works.
+# than torchvision.
 timm = ["timm>=1.0"]
 
 [project.scripts]

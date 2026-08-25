@@ -32,17 +32,11 @@ def _run_torchattack(
     images: torch.Tensor,
     labels: torch.Tensor,
 ) -> torch.Tensor:
-    # With set_normalization_used, torchattacks expects NORMALIZED inputs: it
-    # inverse-normalizes internally, crafts in [0,1] pixel space (normalizing
-    # again before each model call), and returns normalized adversarials. Do
-    # not un/re-normalize around the call -- doing both transforms here as
-    # well doubles them up, which shifts the point the attack is crafted at
-    # and delivers pixel perturbations of ~eps/std (~4.5x the stated budget).
     atk = atk_ctor()
     atk.set_normalization_used(mean=list(IMAGENET_MEAN), std=list(IMAGENET_STD))
     return atk(images, labels)
 
-@dataclass(frozen=True) # what on earth is a frozen dataclass?
+@dataclass(frozen=True) 
 class AttackSpec:
     name: str                # "fgsm" | "pgd" | "cw" | "autoattack"
     epsilon: float           # L-inf budget for FGSM/PGD/AutoAttack; unused by CW
@@ -52,13 +46,11 @@ class AttackSpec:
     cw_kappa: float = 0.0
     cw_lr: float = 0.01
     random_start: bool = True
-    n_classes: int | None = None  # required by AutoAttack's targeted components
+    n_classes: int | None = None  
     aa_version: str = "standard"  # "standard" | "rand"
 
 
 def resolve_pgd_alpha(epsilon: float, steps: int, alpha: float | None) -> float:
-    # 2.5*eps/steps (Madry et al.) -- a fixed alpha equal to eps degenerates
-    # PGD towards a randomly-restarted FGSM at small budgets.
     if alpha is not None:
         return alpha
     return 2.5 * epsilon / max(steps, 1)
@@ -93,9 +85,6 @@ def build_attack(spec: AttackSpec, model: nn.Module) -> Callable[
             )
     elif name == "autoattack":
         # Croce & Hein (2020): APGD-CE + APGD-T + FAB-T + Square, parameter-free.
-        # torchattacks ports the reference implementation. The targeted
-        # components need the class count; Square gives a query-based
-        # black-box attack for free.
         if spec.n_classes is None:
             raise ValueError("AutoAttack requires AttackSpec.n_classes.")
         def ctor():
@@ -124,11 +113,7 @@ def pgd_linf(
     steps: int,
     random_start: bool = True,
 ) -> torch.Tensor:
-    """L-inf PGD on normalized inputs, crafted in pixel space.
-
-    Lightweight inline implementation for the adversarial-training inner loop,
-    where constructing a torchattacks object per batch is wasteful. Gradients
-    are taken in full precision regardless of AMP settings.
+    """L-inf PGD on normalized inputs, in pixel space.
     """
     pixel = _normalize_to_pixel(images).detach()
     if random_start:
@@ -153,10 +138,6 @@ def perturbation_norms(
     clean: torch.Tensor, adv: torch.Tensor
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Per-example (L2, L-inf) perturbation norms in pixel space.
-
-    CW is a minimum-distortion attack: the meaningful statistic is the
-    distortion it needed, not accuracy at a fixed budget, so evaluation
-    records these norms alongside accuracy.
     """
     delta = _normalize_to_pixel(adv) - _normalize_to_pixel(clean)
     flat = delta.flatten(start_dim=1)

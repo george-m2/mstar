@@ -1,24 +1,4 @@
 """Madry-style PGD adversarial training (Madry et al., 2018).
-
-The AT model differs from the clean baseline ONLY in the training loss (worst
--case adversarial examples inside an L-inf ball), so the comparison isolates
-the robustness-accuracy tradeoff. Optimisation hyperparameters come from the
-same per-architecture recipe as clean training.
-
-Defaults follow community convention: eps = 8/255, 7 inner PGD steps,
-alpha = 2.5*eps/steps. Model selection and early stopping use ROBUST validation
-accuracy -- robust overfitting (Rice, Wong & Madry, 2020) means final-epoch
-robustness can be several points below the peak, and clean-accuracy selection
-would quietly pick a less robust model.
-
-    sar-atr-adv-train \
-        --model resnet50 \
-        --seed 0 \
-        --data_dir /scratch/$USER/datasets/atrnet_star \
-        --summary_csv results/adv_train_summary.csv
-
-Cost: ~(k+1)x a clean epoch; 30 epochs at k=7 fits a 12-18h walltime for
-ResNet-50 on one L40. --resume continues from the last epoch if preempted.
 """
 
 from __future__ import annotations

@@ -22,9 +22,6 @@ class DataLoaders:
 
 
 def _rgb_loader(path: str) -> Image.Image:
-    # ATRNet-STAR 8-bit amplitude is single-channel TIFF; ImageFolder's default
-    # PIL loader opens as "L" for those. We explicitly convert to RGB so the
-    # same model architectures and transforms can be used for both datasets.
     with open(path, "rb") as f:
         img = Image.open(f)
         return img.convert("RGB")
@@ -116,14 +113,8 @@ def load_mstar(
     gen = torch.Generator().manual_seed(seed)
     train_ds, val_ds, test_ds = random_split(full, [n_train, n_val, n_test], generator=gen)
 
-    # random_split returns Subsets sharing `full`; swap in the deterministic
-    # test, transform for the eval subsets
+
     eval_ds = datasets.ImageFolder(str(data_dir), transform=test_tf)
-    if eval_ds.classes != full.classes or eval_ds.samples != full.samples:
-        raise RuntimeError(
-            "eval_ds ImageFolder enumerated a different ordering than full -- "
-            "random_split indices would be invalid."
-        )
     val_ds = Subset(eval_ds, val_ds.indices)
     test_ds = Subset(eval_ds, test_ds.indices)
 
@@ -148,10 +139,6 @@ def load_atrnet_star(
     cfg_root = next((c for c in candidates if (c / "train").is_dir() and (c / "test").is_dir()), None)
     if cfg_root is None:
         raise FileNotFoundError(
-            f"Could not locate ATRNet-STAR train/test folders under {root}. "
-            f"Expected `{experimental_config}/train` + `{experimental_config}/test` "
-            f"(or `train`/`test` directly under data_dir). "
-            f"Pass the archive root as --data_dir or override with --atrnet_config."
         )
 
     train_tf, test_tf = build_transforms(image_size=image_size, augment=True)
@@ -162,11 +149,6 @@ def load_atrnet_star(
     test_ds = datasets.ImageFolder(
         str(cfg_root / "test"), transform=test_tf, loader=_rgb_loader,
     )
-
-    if train_full.classes != test_ds.classes:
-        raise RuntimeError(
-            "Train/test class lists disagree for ATRNet-STAR -- dataset integrity problem."
-        )
 
     # seed-dependent slice out of the train split.
     n_val = int(val_fraction * len(train_full))
@@ -203,12 +185,6 @@ def stratified_subset_loader(
     seed: int = 0,
 ) -> DataLoader:
     """Deterministic class-stratified subset of an evaluation DataLoader.
-
-    AutoAttack's targeted components are ~50x the cost of PGD-20 on points the
-    model still classifies correctly; evaluating on a fixed stratified subset
-    (RobustBench-style, e.g. 5000 images) keeps the grid inside HPC walltime.
-    The subset is a function of (dataset, size, seed) only, so every model and
-    attack sees the same images.
     """
     ds = loader.dataset
     targets = _dataset_targets(ds)

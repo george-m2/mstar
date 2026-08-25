@@ -1,25 +1,4 @@
 """Black-box transferability evaluation.
-
-Crafts adversarial examples white-box on a SOURCE checkpoint and evaluates
-them on one or more TARGET checkpoints in the same pass (nothing is written
-to disk: 29k adversarial images at 224px would be ~4.4 GB per configuration).
-Cross-architecture targets answer "adversaries won't have white-box access";
-cross-seed targets of the same architecture demonstrate transfer between
-independently trained models.
-
-    sar-atr-transfer \
-        --dataset atrnet_star \
-        --data_dir /scratch/$USER/datasets/atrnet_star \
-        --source resnet50:0 \
-        --targets efficientnet_b3:0 vit_b_16:0 resnet50:1 \
-        --attack_type pgd \
-        --epsilon 0.02 \
-        --results_csv results/transfer_results.csv
-
-Reported per target:
-  - target_clean_acc / target_adv_acc: accuracy on the clean vs adversarial set
-  - transfer_rate: P(target fooled | source fooled AND target clean-correct),
-    the standard conditional transferability metric.
 """
 
 from __future__ import annotations

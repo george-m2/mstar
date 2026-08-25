@@ -13,13 +13,6 @@ SUPPORTED_MODELS: tuple[str, ...] = ("resnet50", "efficientnet_b3", "vit_b_16", 
 SUPPORTED_ATTACKS: tuple[str, ...] = ("fgsm", "pgd", "cw", "autoattack")
 SUPPORTED_DATASETS: tuple[str, ...] = ("mstar", "atrnet_star")
 
-# Per-architecture fine-tuning recipes. The uniform AdamW lr=1e-3 recipe that
-# worked for the CNNs destroys ViT-B/16's pretrained features (74.7% test acc,
-# train acc 99.9% -- catastrophic forgetting followed by memorisation), so ViT
-# gets the standard transformer fine-tuning treatment: low LR, warmup,
-# layer-wise LR decay, and label smoothing. CNN recipes are unchanged so
-# results from earlier runs remain valid. Any of these can be overridden from
-# the CLI; a None field falls back to the recipe value.
 TRAIN_RECIPES: dict[str, dict] = {
     "resnet50": {
         "lr": 1e-3, "weight_decay": 1e-4, "label_smoothing": 0.0,
@@ -33,8 +26,7 @@ TRAIN_RECIPES: dict[str, dict] = {
         "lr": 1e-4, "weight_decay": 0.05, "label_smoothing": 0.1,
         "warmup_epochs": 5, "layer_decay": 0.75,
     },
-    # SAR-native baseline (Chen et al. 2016), trained from scratch -- answers
-    # the "vulnerability is an artifact of ImageNet transfer" objection.
+    # SAR-native baseline (Chen et al. 2016), trained from scratch
     "aconvnet": {
         "lr": 1e-3, "weight_decay": 4e-3, "label_smoothing": 0.0,
         "warmup_epochs": 0, "layer_decay": None,

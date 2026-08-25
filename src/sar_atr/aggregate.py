@@ -1,17 +1,4 @@
 """Aggregate per-seed attack results into a summary with uncertainty.
-
-With n=5 seeds, a bare +/- SD both under-describes the spread (per-seed
-robustness at small epsilon ranges over tens of points) and invites the
-small-sample objection. This reports per-cell mean, SD, min, max, the
-individual per-seed values, and a bootstrap percentile CI of the mean.
-
-    sar-atr-aggregate \
-        --results_dir results/atrnet_star \
-        --output results/atrnet_star/atrnet_attksum.csv
-
-Reads every CSV under --results_dir that has the sar-atr-attack row schema
-(model, seed, attack_type, epsilon, adv_acc); duplicate (model, seed, attack,
-epsilon) rows keep the most recent occurrence.
 """
 
 from __future__ import annotations

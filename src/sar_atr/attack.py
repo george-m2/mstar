@@ -1,13 +1,5 @@
 """
-    sar-atr-attack \
-        --dataset atrnet_star \
-        --model resnet50 \
-        --seed 0 \
-        --attack_type pgd \
-        --epsilon 0.02 \
-        --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
-        --data_dir /scratch/$USER/datasets/atrnet_star \
-        --results_csv results/attack_results.csv
+Adverserial attack of a given SAR-ATR checkpoint.
 """
 
 from __future__ import annotations
@@ -33,21 +25,6 @@ from sar_atr.utils import (
     append_csv_row, cuda_memory_summary, cuda_peak_memory_gb, get_logger,
     reset_cuda_peak_stats, save_json, seed_everything, select_device,
 )
-
-# SLURM job example:
-# sbatch --gres=gpu:1 --cpus-per-task=4 --mem=16G \
-#     --job-name=attack_rn50_s0_pgd02 \
-#     --output=logs/attack_rn50_s0_pgd02.out \
-#     --error=logs/attack_rn50_s0_pgd02.err \
-#     --wrap="python src/sar_atr/attack.py \
-#         --dataset atrnet_star \
-#         --model resnet50 \
-#         --seed 0 \
-#         --attack_type pgd \
-#         --epsilon 0.02 \
-#         --checkpoint_path checkpoints/atrnet_star/resnet50/seed_0/best_model.pth \
-#         --data_dir /scratch/$USER/datasets/atrnet_star \
-#         --results_csv results/attack_results.csv" 
 
 # all arguments are required except where noted
 def parse_args() -> argparse.Namespace:

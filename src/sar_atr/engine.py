@@ -48,16 +48,10 @@ def train_one_epoch(
     grad_accum_steps: int = 1,
     desc: str = "Training",
 ) -> EpochResult:
-
-    # `grad_accum_steps > 1` lets ViT-B fit into L40 VRAM by splitting each 
-    # effective batch across multiple forward/backward passes before stepping.
     
     model.train()
     total_loss, correct, total = 0.0, 0, 0
     amp_enabled = use_amp and device.type == "cuda"
-    # `torch.amp.GradScaler("cuda", ...)` is the torch 2.4+ API; fall back to
-    # the legacy namespace for older torches so this file stays portable.
-    # no idea what API version ill have...
     try:
         scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
     except (TypeError, AttributeError):
@@ -128,12 +122,7 @@ def evaluate_adversarial(
     desc: str = "Attacking",
     return_perturbation_stats: bool = False,
 ) -> float | tuple[float, dict]:
-    """Adversarial accuracy; optionally also perturbation-norm statistics.
-
-    With `return_perturbation_stats=True`, returns (accuracy, stats) where
-    stats holds pixel-space L2/L-inf norms of successful perturbations. For
-    minimum-distortion attacks (CW) the median L2 is the headline number; for
-    budget-constrained attacks it is a sanity check that the budget held.
+    """Adversarial accuracy.
     """
     from .attacks import perturbation_norms  # local import to avoid a cycle
 
@@ -187,12 +176,7 @@ def train_one_epoch_adversarial(
     use_amp: bool = True,
     desc: str = "AT train",
 ) -> EpochResult:
-    """One epoch of Madry-style adversarial training.
-
-    The model trains purely on adversarial examples. Crafting runs with the
-    model in eval mode so BatchNorm batch statistics are frozen and running
-    stats are not updated k extra times per batch; the update step runs in
-    train mode as usual. Reported accuracy is on the adversarial examples.
+    """One epoch of Madry et al adversarial training.
     """
     total_loss, correct, total = 0.0, 0, 0
     amp_enabled = use_amp and device.type == "cuda"
